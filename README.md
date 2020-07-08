@@ -425,3 +425,198 @@ After inspecting
 > To know what changes in react visit: [React Fire](https://www.youtube.com/redirect?stzid=UgznjOz4hQqekvtagrB4AaABAg&q=https%3A%2F%2Fgithub.com%2Ffacebook%2Freact%2Fissues%2F13525&event=comments&redir_token=QUFFLUhqbFAwWU1JRy1NTHpMV2Y1VmxiM05NTEZ5WWJsQXxBQ3Jtc0tucjRscEtHM1JaNXRHWDQ5R1p4LXVxcTNNaEhUemVNS1BZSlZISVcxQ0JYaHBXSEo4RGRVOF81MnI4RHd1V1RjQ1FoUkZVakJmR0pvc1NRdVZ2eXJWaFFPZFE1dS1hLURoSHRBNzY0UE9zYU8xdFdpQQ%3D%3D)
 
 ---
+
+# **Props** with Functional Components
+
+---
+
+We can reuse the same `component` as many times as we want. Suppose we can use `<MyGreet></MyGreet>` anywhere we want.
+
+> Outputs `Functional Component : Imrul`
+
+> Sometime we need to use different name in place of `Imrul`. In that case the `props` come out to solve.
+
+> `props`: Property -> is an optional input that your component can accept.
+
+> Allows the components dynamic.
+
+- Our goal is to send name to the `MyGreet` component from `App` component. And render that name in the browser.
+
+- To specify props for a component we specify them as `attributes`.
+
+- To specify a name property we just add `name` attribute.
+
+- `props` is just an object
+
+---
+
+### Step 1
+
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import MyGreet from "./components/Greet";
+
+function App() {
+  return (
+    <div className="App">
+      <MyGreet name="Imrul" heroName="Superman"></MyGreet>
+      <MyGreet name="Towhid" heroName="Batman"></MyGreet>
+      <MyGreet name="Hasan" heroName="Spiderman"></MyGreet>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`Greet.js`
+
+```js
+import React from "react";
+
+const Greet = (props) => {
+  console.log(props);
+  return (
+    <h1>
+      Functional Component : {props.name} : {props.heroName}
+    </h1>
+  );
+};
+
+export default Greet;
+```
+
+> Here `props` parameter is passed through function. This name `props` is for naming convention not researved word.
+
+> `props.name` here `name` and `heroName` is id's defined in our custom tags in `App.js`
+
+> And we need to `return` the context which we want to display dynamically.
+
+Output
+
+![](MARKDOWN_NOTE/13.png)
+
+---
+
+## We can pass children tag
+
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import MyGreet from "./components/Greet";
+
+function App() {
+  return (
+    <div className="App">
+      <MyGreet name="Imrul" heroName="Superman">
+        <p>This is children props</p>
+      </MyGreet>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> Here we have an children tag which is `p` tag with a paragraph.
+
+`Greet.js`
+
+```js
+import React from "react";
+
+const Greet = (props) => {
+  console.log(props);
+  return (
+    <div>
+      <h1>
+        Functional Component : {props.name} : {props.heroName}
+      </h1>
+      {props.children}
+    </div>
+  );
+};
+
+export default Greet;
+```
+
+> Here we return also `props.children` after the `h1` tag.
+
+> **One important Limitation:** we can return just one `html` tag. So we can nor `return` `h1` tag followed by th the `children`.
+
+> We we wrap up all elements with a `div` tag and just return it as a single html `tag`.
+
+> **Note:** If the children is not passed by `App.js`, the `Greet.js` component will return just `h1` tag not without `props.children`
+
+> Children can be `p` , `button` or anything.
+
+---
+
+# **Props** with Class Components
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Welcome from "./components/Welcome";
+
+function App() {
+  return (
+    <div className="App">
+      <Welcome name="Imrul" heroName="Superman">
+        <p>Childrens</p>
+      </Welcome>
+      <Welcome name="Towhid" heroName="Batman">
+        <button>Action</button>
+      </Welcome>
+      <Welcome name="Hasan" heroName="Spiderman"></Welcome>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> Similar things
+
+`Welcome.js`
+
+```js
+import React, { Component } from "react";
+
+class Welcome extends Component {
+  render() {
+    return (
+      <div>
+        <h1>
+          Class Component: {this.props.name} : {this.props.heroName}
+        </h1>
+        {this.props.children}
+      </div>
+    );
+  }
+}
+
+export default Welcome;
+```
+
+> Here we must use `this` keyword in order to use `props`.
+
+> **Note:** Here `props` is reserved keyword and we must use exact same name. So its mandatory to use this name not convension.
+
+> we must return just only one html `tag` that's why we wrap up our whole contents in `div` tag to return.
+
+> `props` are **Immutable** meaning the value can't be changed. For example if we try to assign a value to `props.name=Imrul` before returning then it will shows `Type Error`. This is readonly property.
+
+---

@@ -9,8 +9,22 @@ import NotJSX from "./components/Not JSX Version";
 function App() {
   return (
     <div className="App">
-      <MyGreet></MyGreet>
-      <Welcome></Welcome>
+      <MyGreet name="Imrul" heroName="Superman">
+        <p>This is children props</p>
+      </MyGreet>
+      <MyGreet name="Towhid" heroName="Batman">
+        <button>Action</button>
+      </MyGreet>
+      <MyGreet name="Hasan" heroName="Spiderman"></MyGreet>
+
+      <Welcome name="Imrul" heroName="Superman">
+        <p>Childrens</p>
+      </Welcome>
+      <Welcome name="Towhid" heroName="Batman">
+        <button>Action</button>
+      </Welcome>
+      <Welcome name="Hasan" heroName="Spiderman"></Welcome>
+
       <JSX></JSX>
       <NotJSX></NotJSX>
     </div>
