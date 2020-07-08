@@ -283,3 +283,145 @@ export default App;
 ![](MARKDOWN_NOTES/7.png)
 
 ---
+
+# **JSX (JavaScript XML)**
+
+---
+
+![](MARKDOWN_NOTES/8.png)
+
+**Create components with JSX and without JSX.**
+
+## component with JSX
+
+Create a component named `components/JSX Version.js`
+
+`components/JSX Version.js`
+
+```js
+import React from "react";
+
+const JSX = () => {
+  return (
+    <div className="JSXclass">
+      <h1>JSX Version: Hello Imrul!</h1>
+    </div>
+  );
+};
+
+export default JSX;
+```
+
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import JSX from "./components/JSX Version";
+
+function App() {
+  return (
+    <div className="App">
+      <JSX></JSX>
+    </div>
+  );
+}
+
+export default App;
+```
+
+## component without JSX
+
+`components/Not JSX Version.js`
+
+```js
+import React from "react";
+
+const NotJSX = () => {
+  return React.createElement("div", null, "NOT JSX Version");
+};
+
+export default NotJSX;
+```
+
+> `createElement` is built in method of `React`
+
+> `(param1, param2, param3)` minimum 3 params.
+
+> `param1` = String: html tag to be rendered.
+
+> `param2` = optional property: `null` for now.
+
+> `param3` = children of html: children for the `div` here.
+
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import NotJSX from "./components/Not JSX Version";
+
+function App() {
+  return (
+    <div className="App">
+      <NotJSX></NotJSX>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> We use `className` instead of `class` because `class` is a reserved word in JS.
+
+Fix the `<h1>` issues
+
+`components/Not JSX.js`
+
+```js
+import React from "react";
+
+const NotJSX = () => {
+  return React.createElement(
+    "div",
+    { id: "notJSXid", class: "notJSXclass" },
+    React.createElement("h1", null, "NOT JSX Version")
+  );
+};
+
+export default NotJSX;
+```
+
+> Here 3rd parameter is another `createElement` method to specifiy `h1` tag.
+
+> 2nd parameter specify an object. We pass a key `id` with value `notJSXid`
+
+After inspecting
+
+![](MARKDOWN_NOTES/9.png)
+
+![](MARKDOWN_NOTES/10.png)
+
+> Error for `class`. Because in `JavaScript` the `class` is a `reserved word`.
+
+> Solution use `className` instead of `class` key.
+
+```js
+{ id: "notJSXid", className: "notJSXclass" },
+```
+
+> Now its allright.
+
+![](MARKDOWN_NOTES/11.png)
+
+> We can see although we named the key as `className` the original file use `class` not `className`. It is handle by react.
+
+> So in the end we have seen `JSX` is simpler than `without JSX`. Without JSX code become nasty. On the other hand with `JSX` the code will become cleaner and elegant.
+
+![](MARKDOWN_NOTES/12.png)
+
+> To know what changes in react visit: [React Fire](https://www.youtube.com/redirect?stzid=UgznjOz4hQqekvtagrB4AaABAg&q=https%3A%2F%2Fgithub.com%2Ffacebook%2Freact%2Fissues%2F13525&event=comments&redir_token=QUFFLUhqbFAwWU1JRy1NTHpMV2Y1VmxiM05NTEZ5WWJsQXxBQ3Jtc0tucjRscEtHM1JaNXRHWDQ5R1p4LXVxcTNNaEhUemVNS1BZSlZISVcxQ0JYaHBXSEo4RGRVOF81MnI4RHd1V1RjQ1FoUkZVakJmR0pvc1NRdVZ2eXJWaFFPZFE1dS1hLURoSHRBNzY0UE9zYU8xdFdpQQ%3D%3D)
+
+---
