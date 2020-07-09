@@ -5,11 +5,16 @@ import MyGreet from "./components/Greet";
 import Welcome from "./components/Welcome";
 import JSX from "./components/JSX Version";
 import NotJSX from "./components/Not JSX Version";
+import Message from "./components/message";
+import Count from "./components/counter";
 
 function App() {
   return (
     <div className="App">
-      <MyGreet name="Imrul" heroName="Superman">
+      <Count></Count>
+      {/* <Message></Message> */}
+
+      {/* <MyGreet name="Imrul" heroName="Superman">
         <p>This is children props</p>
       </MyGreet>
       <MyGreet name="Towhid" heroName="Batman">
@@ -24,9 +29,8 @@ function App() {
         <button>Action</button>
       </Welcome>
       <Welcome name="Hasan" heroName="Spiderman"></Welcome>
-
       <JSX></JSX>
-      <NotJSX></NotJSX>
+      <NotJSX></NotJSX> */}
     </div>
   );
 }

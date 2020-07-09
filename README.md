@@ -620,3 +620,285 @@ export default Welcome;
 > `props` are **Immutable** meaning the value can't be changed. For example if we try to assign a value to `props.name=Imrul` before returning then it will shows `Type Error`. This is readonly property.
 
 ---
+
+# **State**
+
+---
+
+## Props vs State
+
+![](MARKDOWN_NOTES/14.png)
+
+## Example of `state`
+
+`components/message.js`
+
+```js
+import React, { Component } from "react";
+
+class Message extends Component {
+  constructor() {
+    super();
+    this.state = {
+      message: "Welcome Visitor",
+    };
+  }
+
+  changeMessage() {
+    this.setState({
+      message: "Thank you for subscribing",
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>{this.state.message}</h1>
+        <button onClick={() => this.changeMessage()}>Subscribe</button>
+      </div>
+    );
+  }
+}
+
+export default Message;
+```
+
+> Firstly we create a `constructor()` above. This construct extends the charecteristics of `Component` class which is parent class actually using `super()`. And a `message` is set in `state`. As it is `class based` so we use `this` keywords.
+
+> Secondly there is another function named `changeMessage()` in which we set the `message` to different text. To execute this function we need to call this `changeMessage()` function. Whereas `constructor` doesn't need to call to be executed.
+
+> Thirdly in render function we return the `message` calling `this.state.message` inside `h1` tag. The message inside the `constructor` is initial state.
+
+> Fourthly, when we click the `button` there is an `EventHandler` called `onClick`. And call the `changeMessage()` function. And withinn the `changeMessage()` function we the `message` is changed using `this.setState`. This is how we change the state.
+
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Message from "./components/message";
+
+function App() {
+  return (
+    <div className="App">
+      <Message></Message>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> In `App.js` everything is similar to before.
+
+Output
+
+### Initial State
+
+![](MARKDOWN_NOTES/15.png)
+
+### second State
+
+![](MARKDOWN_NOTES/16.png)
+
+---
+
+# VS Code ES7 React/Redux/React-Native/JS snippets | Extension
+
+---
+
+### Shortcut for class component:
+
+- type `rce`
+- click on `tab` button
+
+### Shorcut for constuctor in class component.
+
+- type `rconst`
+- click `tab`
+
+---
+
+# **setState** in class component
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Count from "./components/counter";
+
+function App() {
+  return (
+    <div className="App">
+      <Count></Count>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`counter.js`
+
+```js
+import React, { Component } from "react";
+
+class counter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increament() {
+    // this.state.count = this.state.count + 1; //it should never be used
+    this.setState({
+      count: this.state.count + 1,
+    });
+    console.log(this.state.count);
+  }
+
+  render() {
+    return (
+      <div>
+        <div>count - {this.state.count}</div>
+        <button onClick={() => this.increament()}>Increament</button>
+      </div>
+    );
+  }
+}
+
+export default counter;
+```
+
+> Never change state directly using `this.state.count = this.state.count + 1;`. Because it will change state in `console` but not in `UI`. React not rendering the state when it changes.
+
+> **One Problem:**
+
+![](MARKDOWN_NOTES/17.png)
+
+> Here we can see the `console value` = `rendered value` - `1`. Because calls to `setState` is `asynchronous`. console is called before the change of state. So console print less than 1 value.
+
+> Sometime we might want to execute some codes only after the state is updated. We can handle such situation with a `callback` function as the second parameter of `setState` method.
+
+> `setState(object, callback function)`
+
+```js
+increament() {
+  this.setState(
+  {
+    count: this.state.count + 1,
+  },
+  () => {
+    console.log("Callback value: ", this.state.count);
+    }
+  );
+console.log(this.state.count);
+}
+```
+
+> Here we can see the first parameter is an `object`. And the 2nd parameter is a `callback` function which we want to execute right after the `setState` method.
+
+> **TIPS: ** Whenever you want to execute some code after `setState` method, don't put the code after `setState` method. Instead you pass the codes through a `callback` function.
+
+---
+
+## Complex
+
+`counter.js`
+
+```js
+import React, { Component } from "react";
+
+class counter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increament() {
+    this.setState(
+      {
+        count: this.state.count + 1,
+      },
+      () => {
+        console.log("Callback value: ", this.state.count);
+      }
+    );
+    console.log(this.state.count);
+  }
+
+  increamentFive() {
+    this.increament();
+    this.increament();
+    this.increament();
+    this.increament();
+    this.increament();
+  }
+
+  render() {
+    return (
+      <div>
+        <div>count - {this.state.count}</div>
+        <button onClick={() => this.increament()}>Increament</button>
+        <br></br>
+        <button onClick={() => this.increamentFive()}>IncreamentFive</button>
+      </div>
+    );
+  }
+}
+
+export default counter;
+```
+
+> Click on `IncreamentFIve` button
+
+Results
+
+![](MARKDOWN_NOTES/18.png)
+
+> We can see when we click on `IncreamentFive` it increaments just `1` instead of `5`. And we can also see that the `asynchronous` console prints each counter value 5 times with same value.
+
+> Why is this?
+
+> Because `react` may group multiple setState calls into a single update for better performance so what happens in our scenario is the five set state calls are done in one signel go and updated value doesn't carry over between the different calls.
+
+### Solution
+
+```js
+increament() {
+  this.setState(
+    (prevState, props) => ({
+      count: prevState.count + 1,
+    }),
+    () => {
+      console.log("Callback value: ", this.state.count);
+    }
+  );
+  console.log(this.state.count);
+}
+```
+
+Outputs
+
+![](MARKDOWN_NOTES/19.png)
+
+> **TIPS: ** Whenever you have to `update` the state based on the `previous state` make sure to pass a `function` as an argument instead of passing a regular `object`. Function has access to the previous state which can be used to calculate a new state. In that function first parameter is the `Prevstate` and the second parameter may be `props`. So we can also make use of `props` as well.
+
+## Summary
+
+![](MARKDOWN_NOTES/20.png)
+
+---
+
+# **Destructuring props and state**
+
+---
