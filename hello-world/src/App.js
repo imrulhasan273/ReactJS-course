@@ -11,26 +11,27 @@ import Count from "./components/counter";
 function App() {
   return (
     <div className="App">
-      <Count></Count>
+      {/* <Count></Count> */}
       {/* <Message></Message> */}
 
       {/* <MyGreet name="Imrul" heroName="Superman">
         <p>This is children props</p>
-      </MyGreet>
-      <MyGreet name="Towhid" heroName="Batman">
+      </MyGreet> */}
+      {/* <MyGreet name="Towhid" heroName="Batman">
         <button>Action</button>
-      </MyGreet>
-      <MyGreet name="Hasan" heroName="Spiderman"></MyGreet>
+      </MyGreet> */}
 
-      <Welcome name="Imrul" heroName="Superman">
+      {/* <MyGreet name="Hasan" heroName="Spiderman"></MyGreet> */}
+
+      {/* <Welcome name="Imrul" heroName="Superman">
         <p>Childrens</p>
-      </Welcome>
-      <Welcome name="Towhid" heroName="Batman">
+      </Welcome> */}
+      {/* <Welcome name="Towhid" heroName="Batman">
         <button>Action</button>
-      </Welcome>
+      </Welcome> */}
       <Welcome name="Hasan" heroName="Spiderman"></Welcome>
-      <JSX></JSX>
-      <NotJSX></NotJSX> */}
+      {/* <JSX></JSX> */}
+      {/* <NotJSX></NotJSX> */}
     </div>
   );
 }

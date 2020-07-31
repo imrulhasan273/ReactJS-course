@@ -903,4 +903,111 @@ Outputs
 
 ---
 
-check
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import MyGreet from "./components/Greet";
+
+function App() {
+  return (
+    <div className="App">
+      <MyGreet name="Hasan" heroName="Spiderman"></MyGreet>
+    </div>
+  );
+}
+
+export default App;
+```
+
+## Way 1 [Destructuring with parameters]
+
+`Greet.js`
+
+```js
+import React from "react";
+
+const Greet = ({ name, heroName }) => {
+  return (
+    <div>
+      <h1>
+        Functional Component : {name} : {heroName}
+      </h1>
+    </div>
+  );
+};
+
+export default Greet;
+```
+
+> Here we use `Greet = ({ name, heroName })` instead of `Greet = props`
+
+## Way 2 [Destructuring in function body]
+
+`Greet.js`
+
+```js
+import React from "react";
+
+const Greet = (props) => {
+  const { name, heroName } = props;
+  return (
+    <div>
+      <h1>
+        Functional Component : {name} : {heroName}
+      </h1>
+    </div>
+  );
+};
+
+export default Greet;
+```
+
+## Way 3 : [Destructuring in Class Components]
+
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Welcome from "./components/Welcome";
+
+function App() {
+  return (
+    <div className="App">
+      <Welcome name="Hasan" heroName="Spiderman"></Welcome>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`Welcome.js`
+
+```js
+import React, { Component } from "react";
+
+class Welcome extends Component {
+  render() {
+    const { name, heroName } = this.props;
+    return (
+      <div>
+        <h1>
+          Class Component: {name} : {heroName}
+        </h1>
+        {this.props.children}
+      </div>
+    );
+  }
+}
+
+export default Welcome;
+```
+
+> `const { state1, state2 } = this.state;` If there need some states.
+
+---
