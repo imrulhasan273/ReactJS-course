@@ -1011,3 +1011,268 @@ export default Welcome;
 > `const { state1, state2 } = this.state;` If there need some states.
 
 ---
+
+# **Event Handling**
+
+---
+
+- Mouse Click, Mouse Over, Key Press, Change Event etc
+
+two rules
+
+- React events are named as camel case rather than lower case
+- Pass a function as the event handler rather than a string.
+
+  - Instead of `onClick="clickHandler()"` use `onClick={clickHandler}`
+
+- In Vanilla JS its possible to define a function withing another function.
+
+## Funcional Components
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import FunctionClick from "./components/FunctionClick";
+
+function App() {
+  return (
+    <div className="App">
+      <FunctionClick></FunctionClick>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`FunctionClick.js`
+
+```js
+import React from "react";
+
+function FunctionClick() {
+  function clickHandler() {
+    console.log("Button Clicked");
+  }
+  return (
+    <div>
+      <button onClick={clickHandler}>Click</button>
+    </div>
+  );
+}
+
+export default FunctionClick;
+```
+
+> Notice: We pass the function name on `onClick` without `()`
+
+> pass function not function call.
+
+## Class Compenents
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClassClick from "./components/ClassClick";
+
+function App() {
+  return (
+    <div className="App">
+      <ClassClick></ClassClick>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ClassClick.js`
+
+```js
+import React, { Component } from "react";
+class ClassClick extends Component {
+  clickHandler() {
+    console.log("Button Clicked");
+  }
+  render() {
+    return (
+      <div>
+        <button onClick={this.clickHandler}>Click Me</button>
+      </div>
+    );
+  }
+}
+
+export default ClassClick;
+```
+
+---
+
+# **Binding Event Handlers**
+
+---
+
+Why Use it?
+
+> because of the way this keyword works in JavaScript it is not because of how react works
+
+## Class Components
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import EventBind from "./components/EventBind";
+
+function App() {
+  return (
+    <div className="App">
+      <EventBind></EventBind>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`EventBind.js`
+
+```js
+import React, { Component } from "react";
+
+class EventBind extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      message: "Hello",
+    };
+  }
+
+  clickHandler() {
+    this.setState({
+      message: "Goodbye",
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <div>{this.state.message}</div>
+        <button onClick={this.clickHandler}>Click</button>
+      </div>
+    );
+  }
+}
+
+export default EventBind;
+```
+
+### But there is an error!!!
+
+> `TypeError: Cannot read property 'setState' of undefined`
+
+> Because `this` keyword withing the event handler is `undefined`. That's why `event binding` is necessary in `react class component`
+
+After Fixing
+
+### Way 1 [use bind keyword and bind the handler]
+
+`EventBind.js`
+
+```js
+<button onClick={this.clickHandler.bind(this)}>Click</button>
+```
+
+> How it works: Every update to the state will cause the component to rerender. This in turn will generate a brand new event handler on every render. Impact on performace is not severe in small applications. But it could be troublesome in large applications and components that contain nested children components.
+
+### Way 2 [use arrow function s in the render method]
+
+`EventHandler.js`
+
+```js
+<button onClick={() => this.clickHandler()}>Click</button>
+```
+
+### Way 3 [binding the Event Handler in Constructor] `[***]` [Official Approach]
+
+`EventBind.js`
+
+```js
+import React, { Component } from "react";
+
+class EventBind extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      message: "Hello",
+    };
+
+    this.clickHandler = this.clickHandler.bind(this);
+  }
+
+  clickHandler() {
+    this.setState({
+      message: "Goodbye",
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <div>{this.state.message}</div>
+        <button onClick={this.clickHandler}>Click</button>
+      </div>
+    );
+  }
+}
+
+export default EventBind;
+```
+
+### Way 4 [arrow function as a class property]
+
+`EventBind.js`
+
+```js
+import React, { Component } from "react";
+
+class EventBind extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      message: "Hello",
+    };
+  }
+
+  clickHandler = () => {
+    this.setState({
+      message: "Goodbye",
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <div>{this.state.message}</div>
+        <button onClick={this.clickHandler}>Click</button>
+      </div>
+    );
+  }
+}
+
+export default EventBind;
+```
+
+---
+
+# **Methods as props**
+
+---

@@ -7,10 +7,16 @@ import JSX from "./components/JSX Version";
 import NotJSX from "./components/Not JSX Version";
 import Message from "./components/message";
 import Count from "./components/counter";
+import FunctionClick from "./components/FunctionClick";
+import ClassClick from "./components/ClassClick";
+import EventBind from "./components/EventBind";
 
 function App() {
   return (
     <div className="App">
+      <EventBind></EventBind>
+      {/* <ClassClick></ClassClick> */}
+      {/* <FunctionClick></FunctionClick> */}
       {/* <Count></Count> */}
       {/* <Message></Message> */}
 
@@ -29,7 +35,7 @@ function App() {
       {/* <Welcome name="Towhid" heroName="Batman">
         <button>Action</button>
       </Welcome> */}
-      <Welcome name="Hasan" heroName="Spiderman"></Welcome>
+      {/* <Welcome name="Hasan" heroName="Spiderman"></Welcome> */}
       {/* <JSX></JSX> */}
       {/* <NotJSX></NotJSX> */}
     </div>
