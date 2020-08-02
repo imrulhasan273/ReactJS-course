@@ -1276,3 +1276,155 @@ export default EventBind;
 # **Methods as props**
 
 ---
+
+> We pass a reference to a method as props to the child component.
+
+`App.js`
+
+```js
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import ParentComponent from "./components/ParentComponent";
+
+function App() {
+  return (
+    <div className="App">
+      <ParentComponent></ParentComponent>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ChildComponent.js`
+
+```js
+import React from "react";
+
+function ChildComponent(props) {
+  return (
+    <div>
+      <button onClick={props.greetHandler}>Greet Parent</button>
+    </div>
+  );
+}
+
+export default ChildComponent;
+```
+
+> When click on the `button` then fire the `greetHandler` in `ParentComponent` and the `greetHandler` is taken using `props`
+
+`ParentComponent.js`
+
+```js
+import React, { Component } from "react";
+import ChildComponent from "./ChildComponent";
+
+class ParentComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      parentName: "Parent",
+    };
+
+    this.greetParent = this.greetParent.bind(this);
+  }
+
+  greetParent() {
+    // alert('Hello' + this.state.parentName)
+    alert(`Hello ${this.state.parentName}`); //ES6 syntax
+  }
+
+  render() {
+    return (
+      <div>
+        <ChildComponent greetHandler={this.greetParent}></ChildComponent>
+      </div>
+    );
+  }
+}
+
+export default ParentComponent;
+```
+
+> `this.greetParent = this.greetParent.bind(this);` is need to bind in `constructor`
+
+---
+
+## pass parameter when calling the parent method from the child component.
+
+- Array function syntax is the simplest way to pass parameters from the child compoent to the parent component.
+
+`ChildComponent.js`
+
+```js
+import React from "react";
+
+function ChildComponent(props) {
+  return (
+    <div>
+      <button onClick={() => props.greetHandler("child")}>Greet Parent</button>
+    </div>
+  );
+}
+
+export default ChildComponent;
+```
+
+> pass a string `child` to the parent `greetHandler`
+
+`ParentComponent.js`
+
+```js
+import React, { Component } from "react";
+import ChildComponent from "./ChildComponent";
+
+class ParentComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      parentName: "Parent",
+    };
+
+    this.greetParent = this.greetParent.bind(this);
+  }
+
+  greetParent(childName) {
+    alert(`Hello ${this.state.parentName} from ${childName}`);
+  }
+
+  render() {
+    return (
+      <div>
+        <ChildComponent greetHandler={this.greetParent}></ChildComponent>
+      </div>
+    );
+  }
+}
+
+export default ParentComponent;
+```
+
+> Receive the `string` in parameter of `greetParent` function. And prints in alert function.
+
+## Process Overview
+
+Parent
+
+- method is defined in `ParentComponent`
+
+- on the Child Component tag pass the method as a `props`
+
+Child
+
+- In the child component access the method using the `props` object
+
+- You have to pass a parameter use the array function systax.
+
+By the way you can destructure the props object in the functional component but since we have this one prop I'm going to leave it as it is.
+
+---
