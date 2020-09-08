@@ -1,21 +1,23 @@
 import React from "react";
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
 import "./App.css";
-import MyGreet from "./components/Greet";
-import Welcome from "./components/Welcome";
-import JSX from "./components/JSX Version";
-import NotJSX from "./components/Not JSX Version";
-import Message from "./components/message";
-import Count from "./components/counter";
-import FunctionClick from "./components/FunctionClick";
-import ClassClick from "./components/ClassClick";
-import EventBind from "./components/EventBind";
-import ParentComponent from "./components/ParentComponent";
+// import UserGreeting from "./components/UserGreeting";
+// import MyGreet from "./components/Greet";
+// import Welcome from "./components/Welcome";
+// import JSX from "./components/JSX Version";
+// import NotJSX from "./components/Not JSX Version";
+// import Message from "./components/message";
+// import Count from "./components/counter";
+// import FunctionClick from "./components/FunctionClick";
+// import ClassClick from "./components/ClassClick";
+// import EventBind from "./components/EventBind";
+// import ParentComponent from "./components/ParentComponent";
 
 function App() {
   return (
     <div className="App">
-      <ParentComponent></ParentComponent>
+      {/* <UserGreeting></UserGreeting> */}
+      {/* <ParentComponent></ParentComponent> */}
       {/* <EventBind></EventBind> */}
       {/* <ClassClick></ClassClick> */}
       {/* <FunctionClick></FunctionClick> */}

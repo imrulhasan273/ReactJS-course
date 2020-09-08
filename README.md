@@ -1374,9 +1374,13 @@ function ChildComponent(props) {
 export default ChildComponent;
 ```
 
+> react Snippet: **rfce** -> **tab**
+
 > pass a string `child` to the parent `greetHandler`
 
 `ParentComponent.js`
+
+> Arrow function is used to pass parameters from child components to parent components.
 
 ```js
 import React, { Component } from "react";
@@ -1409,6 +1413,8 @@ class ParentComponent extends Component {
 export default ParentComponent;
 ```
 
+> `greetHanlder` as a **props**
+
 > Receive the `string` in parameter of `greetParent` function. And prints in alert function.
 
 ## Process Overview
@@ -1426,5 +1432,172 @@ Child
 - You have to pass a parameter use the array function systax.
 
 By the way you can destructure the props object in the functional component but since we have this one prop I'm going to leave it as it is.
+
+---
+
+---
+
+# **Conditional Rendering**
+
+---
+
+Approach
+
+- if/else
+- element variables
+- ternamy conditional operator
+- short circuit operator
+
+`App.js`
+
+```js
+import React from "react";
+// import logo from "./logo.svg";
+import "./App.css";
+import UserGreeting from "./components/UserGreeting";
+
+function App() {
+  return (
+    <div className="App">
+      <UserGreeting></UserGreeting>
+    </div>
+  );
+}
+
+export default App;
+```
+
+## If/Else Approach
+
+`UserGreeting.js`
+
+```js
+import React, { Component } from "react";
+
+class UserGreeting extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoggedIn: false,
+    };
+  }
+
+  render() {
+    if (this.state.isLoggedIn) {
+      return (
+        <div>
+          <div>Welcome Imrul!</div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div>Welcome Guest!</div>
+        </div>
+      );
+    }
+  }
+}
+
+export default UserGreeting;
+```
+
+> We can not use condition inside `JSX` So we must use condtion outside of `JSX`
+
+## Approach 2: Element Variables
+
+`UserGreeting.js`
+
+```js
+import React, { Component } from "react";
+
+class UserGreeting extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoggedIn: false,
+    };
+  }
+
+  render() {
+    let message;
+    if (this.state.isLoggedIn) {
+      message = <div>Welcome Imrul!</div>;
+    } else {
+      message = <div>Welcome Guest!</div>;
+    }
+
+    return <div>{message}</div>;
+  }
+}
+
+export default UserGreeting;
+```
+
+> Here `message` is a variable which is stores the element to be rendered.
+
+## Approach 3: Ternamy Conditional Operator
+
+`UserGreeting.js`
+
+```js
+import React, { Component } from "react";
+
+class UserGreeting extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoggedIn: false,
+    };
+  }
+
+  render() {
+    return this.state.isLoggedIn ? (
+      <div>Welcome Imrul</div>
+    ) : (
+      <div>Welcome Guest</div>
+    );
+  }
+}
+
+export default UserGreeting;
+```
+
+> Benifit: can be used inside the JSX.
+
+## Approach 4: Short Circuit Operator
+
+`UserGreeting.js`
+
+```js
+import React, { Component } from "react";
+
+class UserGreeting extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoggedIn: true,
+    };
+  }
+
+  render() {
+    return this.state.isLoggedIn && <div>Welcome Imrul</div>;
+  }
+}
+
+export default UserGreeting;
+```
+
+> if `this.state.isLoggedIn` is true then `<div>Welcome Imrul</div>` is also true. This it returns the statement.
+
+> if `this.state.isLoggedIn` is false then no matter right side true or false the statement will always false. Hence return nothing.
+
+---
+
+> Finally Approach #3 and #4 is much more cleaner and readable.
 
 ---
