@@ -1,6 +1,7 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
+import NameList from "./components/NameList";
 // import UserGreeting from "./components/UserGreeting";
 // import MyGreet from "./components/Greet";
 // import Welcome from "./components/Welcome";
@@ -16,6 +17,7 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
+      <NameList></NameList>
       {/* <UserGreeting></UserGreeting> */}
       {/* <ParentComponent></ParentComponent> */}
       {/* <EventBind></EventBind> */}

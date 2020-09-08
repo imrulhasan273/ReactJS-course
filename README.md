@@ -1601,3 +1601,232 @@ export default UserGreeting;
 > Finally Approach #3 and #4 is much more cleaner and readable.
 
 ---
+
+---
+
+# **List Rendering**
+
+---
+
+> The `map()` method creates a new array populated with the results of calling a provided function on every element in the calling array.
+
+```js
+const array1 = [1, 4, 9, 16];
+
+// pass a function to map
+const map1 = array1.map((x) => x * 2); // param => func body
+
+console.log(map1);
+// expected output: Array [2, 8, 18, 32]
+```
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+// import logo from "./logo.svg";
+import "./App.css";
+import NameList from "./components/NameList";
+function App() {
+  return (
+    <div className="App">
+      <NameList></NameList>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`NameList.js`
+
+```js
+import React from "react";
+
+function NameList() {
+  const names = ["imrul", "hasan", "brishty", "akter"];
+  return (
+    <div>
+      <h2>{names[0]}</h2>
+      <h2>{names[1]}</h2>
+      <h2>{names[2]}</h2>
+      <h2>{names[3]}</h2>
+    </div>
+  );
+}
+
+export default NameList;
+```
+
+> But this is not proper way of list rendering.
+
+`NameList.js`
+
+```js
+import React from "react";
+
+function NameList() {
+  const names = ["Imrul", "Hasan", "UAP", "CSE"];
+  return (
+    <div>
+      {names.map((name) => (
+        <h2>{name}</h2>
+      ))}
+    </div>
+  );
+}
+
+export default NameList;
+```
+
+### Example 1
+
+`NameList.js`
+
+```js
+import React from "react";
+
+function NameList() {
+  const names = ["Imrul", "Hasan", "UAP", "CSE"];
+  const NameList = names.map((name) => <h2>{name}</h2>);
+
+  return <div>{NameList}</div>;
+}
+
+export default NameList;
+```
+
+### Example 2
+
+`NameList.js`
+
+```js
+import React from "react";
+
+function NameList() {
+  const persons = [
+    {
+      id: 1,
+      name: "Imrul",
+      age: 24,
+      skill: "Laravel",
+    },
+    {
+      id: 2,
+      name: "Hasan",
+      age: 23,
+      skill: "ReactJS",
+    },
+    {
+      id: 3,
+      name: "Imu",
+      age: 25,
+      skill: "JQuery",
+    },
+    {
+      id: 4,
+      name: "Backstreet",
+      age: 20,
+      skill: "Wordpress",
+    },
+    {
+      id: 5,
+      name: "Boys",
+      age: 21,
+      skill: "JavaScript",
+    },
+  ];
+
+  const PersonList = persons.map((person) => (
+    <h2 key={person.id}>
+      I am {person.name}. I am {person.age} years old. I know {person.skill}{" "}
+      very well.
+    </h2>
+  ));
+
+  return <div>{PersonList}</div>;
+}
+
+export default NameList;
+```
+
+> Here we I use `key={person.id}` inside the `h2` tag as it recommanded to use.
+
+> Everything works fine. But needs to be refactored.
+
+### Formated Way
+
+`NameList.js`
+
+```js
+import React from "react";
+import Person from "./Person";
+
+function NameList() {
+  const persons = [
+    {
+      id: 1,
+      name: "Imrul",
+      age: 24,
+      skill: "Laravel",
+    },
+    {
+      id: 2,
+      name: "Hasan",
+      age: 23,
+      skill: "ReactJS",
+    },
+    {
+      id: 3,
+      name: "Imu",
+      age: 25,
+      skill: "JQuery",
+    },
+    {
+      id: 4,
+      name: "Backstreet",
+      age: 20,
+      skill: "Wordpress",
+    },
+    {
+      id: 5,
+      name: "Boys",
+      age: 21,
+      skill: "JavaScript",
+    },
+  ];
+
+  const PersonList = persons.map((person) => <Person person={person}></Person>);
+
+  return <div>{PersonList}</div>;
+}
+
+export default NameList;
+```
+
+> Here inside `<Person> </Person>` we pass the `person` as a props as `person` in the file.
+
+`Person.js`
+
+```js
+import React from "react";
+
+function Person({ person }) {
+  return (
+    <div>
+      <h2>
+        I am {person.name}. I am {person.age} years old. I know {person.skill}
+        very well.
+      </h2>
+    </div>
+  );
+}
+
+export default Person;
+```
+
+> Here I get the person as props and use it inside the `h2` tag.
+
+---
