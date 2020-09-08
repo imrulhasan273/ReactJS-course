@@ -1798,13 +1798,17 @@ function NameList() {
     },
   ];
 
-  const PersonList = persons.map((person) => <Person person={person}></Person>);
+  const PersonList = persons.map((person) => (
+    <Person key={person.id} person={person}></Person>
+  ));
 
   return <div>{PersonList}</div>;
 }
 
 export default NameList;
 ```
+
+> Here `key` props is not accessable in child component, here in `Person`. So we can not pass key as props in `Person` Compoent.
 
 > Here inside `<Person> </Person>` we pass the `person` as a props as `person` in the file.
 
@@ -1830,3 +1834,14 @@ export default Person;
 > Here I get the person as props and use it inside the `h2` tag.
 
 ---
+
+> Why `key` props is Important?
+
+- Becuase it handles UI updates efficiently.
+
+## List And Keys
+
+- A key is a special string attribue you need to include when creating list of elements
+- Keys gives the element a stable identity
+- Keys help react identify which items have changed, are added, or removed
+- Helps in efficient update of the user interface
