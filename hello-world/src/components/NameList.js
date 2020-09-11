@@ -29,18 +29,25 @@ function NameList() {
     },
     {
       id: 5,
-      name: "Boys",
+      name: "Boy",
       age: 21,
       skill: "JavaScript",
     },
   ];
-  // const names = ["Imrul", "Hasan", "UAP", "CSE"];
-  // const NameList = names.map((name) => <h2>{name}</h2>);
+
   const PersonList = persons.map((person) => (
     <Person key={person.id} person={person}></Person>
   ));
 
-  return <div>{PersonList}</div>;
+  const names = ["Imrul", "Hasan", "UAP", "CSE", "Imrul"];
+  const NameList = names.map((name, index) => (
+    <h2 key={index}>
+      {index} : {name}
+    </h2>
+  ));
+
+  // return <div>{PersonList}</div>;
+  return <div> {NameList}</div>;
 }
 
 export default NameList;

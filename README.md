@@ -1845,3 +1845,89 @@ export default Person;
 - Keys gives the element a stable identity
 - Keys help react identify which items have changed, are added, or removed
 - Helps in efficient update of the user interface
+
+---
+
+# **Index as Key Anti-pattern**
+
+---
+
+`NameList.js`
+
+```js
+import React from "react";
+import Person from "./Person";
+
+function NameList() {
+  const names = ["Imrul", "Hasan", "UAP", "CSE"];
+  const NameList = names.map((name) => <h2 key={name}>{name}</h2>);
+
+  return <div> {NameList}</div>;
+}
+
+export default NameList;
+```
+
+> Here `key={name}` inside `h2` so that the console error gone.
+
+> **Note:** There will be no error until every element of `names` are unique. If there are duplicate same value then a new error occurs as `key` here violates the rules of uniqueness.
+
+> If below `names` is used? Here `"Imrul"` used twich.
+
+```js
+const names = ["Imrul", "Hasan", "UAP", "CSE", "Imrul"];
+```
+
+> Warning: `Warning: Encountered two children with the same key, `Imrul`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+
+## Solution?
+
+`NameList.js`
+
+```js
+import React from "react";
+import Person from "./Person";
+
+function NameList() {
+  const names = ["Imrul", "Hasan", "UAP", "CSE", "Imrul"];
+  const NameList = names.map((name, index) => (
+    <h2 key={index}>
+      {index} : {name}
+    </h2>
+  ));
+
+  return <div> {NameList}</div>;
+}
+
+export default NameList;
+```
+
+> Here `index` number passed as a `props` in second parameter with `name`. And use this `index` as key
+
+- Index as key will cause some SERIOUS UI issues in certain scenarios and to demonastrat these scenarios there is an example
+
+- LINKS [LINKS](https://codepen.io/gopinav/pen/gQpepq)
+
+![](MARKDOWN_NOTES/23.png)
+
+> Here we can see when we insert for a new item to the first. then index/id/timestamps works as we expected. But the empty row in the end. It should be in first. Its a major problem. So we should not use `index` as `key`.
+
+> How react interpret this???? [below]
+
+![](MARKDOWN_NOTES/24.png)
+
+## Why?
+
+- Because react thinks that it have already 3 values of `id = 1/2/3`. SO React reuse them and put a empty box for new id=4.
+
+## Sorting Problem
+
+- When we try to sort the elements `id`, `index` and `timestamps` will be changed. But the `item` value will as it was.
+
+## So when to use `Index` is `Key`?
+
+- The item in your list do not have a unique `ID`
+- The list is static list and will not change.
+- The list will never reordered or filterd.
+
+---
