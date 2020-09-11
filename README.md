@@ -1931,3 +1931,255 @@ export default NameList;
 - The list will never reordered or filterd.
 
 ---
+
+# **Styling and CSS Basics**
+
+---
+
+## Few Options of Styling
+
+1. Regular CSS Stylesheet
+2. Inline Styling
+3. CSS Module
+4. CSS in JS Libraries (Styled Components)
+
+## Aproach 1: Regular CSS Stylesheet
+
+### Step 1: Creating Stylesheet
+
+> Create `Stylesheet.js` inside component folder
+> `rfce` tab to create functional Component in `Stylesheet.js`
+
+### Step 2: Add the `Component` in `App.js`
+
+> Add `<Stylesheet></Stylesheet>` in `App.js` and import in top
+
+### Step 4: To Specify the CSS for this compoent
+
+- Create a new file named `myStyles.css`
+
+- add some CSS rules
+
+### Step 5: import the `CSS` file in the target file
+
+- import `myStyle.css` in `Stylesheet.js`
+- and add `className="property"` in any tag to view the applied CSS rules
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import Stylesheet from "./components/Stylesheet";
+
+function App() {
+  return (
+    <div className="App">
+      <Stylesheet></Stylesheet>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`Stylesheet.js`
+
+```js
+import React from "react";
+import "./myStyles.css";
+
+function Stylesheet() {
+  return (
+    <div>
+      <h1 className="primary">Stylesheet</h1>
+    </div>
+  );
+}
+
+export default Stylesheet;
+```
+
+`myStyles.css`
+
+```css
+.primary {
+  color: orange;
+}
+```
+
+> This will display the Text inside `h1` tag in orange color.
+
+> if I want to display in a certain condition....
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import Stylesheet from "./components/Stylesheet";
+
+function App() {
+  return (
+    <div className="App">
+      <Stylesheet primary={false}></Stylesheet>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`Stylesheet.js`
+
+```js
+import React from "react";
+import "./myStyles.css";
+
+function Stylesheet(props) {
+  let className = props.primary ? "primary" : "";
+  return (
+    <div>
+      <h1 className={className}>Stylesheet</h1>
+    </div>
+  );
+}
+
+export default Stylesheet;
+```
+
+> Here `props` will take the values of `primary` passed from `App.js`
+
+> if primary is `true` then this conditional statement will set value of `className` variable to `primary` else `''`
+
+## If You Want To Specify Multiple Classes
+
+- Simplest Option is to use `Template Literals` using `backticks`
+
+`Stylesheet.js`
+
+```js
+import React from "react";
+import "./myStyles.css";
+
+function Stylesheet(props) {
+  let className = props.primary ? "primary" : "";
+  return (
+    <div>
+      <h1 className={`${className} font-xl`}>Stylesheet</h1>
+    </div>
+  );
+}
+
+export default Stylesheet;
+```
+
+> Here we can see multple class attrubute is passed in `className` inside `h1` tag.
+
+## Approach 2: Inline Styling
+
+- In react `inline css` are not specified as `string` instead they are specified as `object` whose key is the camel case version of the style name and the value is usually a string.
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import Inline from "./components/Inline";
+
+function App() {
+  return (
+    <div className="App">
+      <Inline></Inline>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`Inline.js`
+
+```js
+import React from "react";
+
+const heading = {
+  fontSize: "72px",
+  color: "blue",
+};
+
+function inline() {
+  return (
+    <div>
+      <h1 style={heading}>Inline CSS</h1>
+    </div>
+  );
+}
+
+export default inline;
+```
+
+> **Notice:** For inline we use the attribute `style`
+
+## Approach 3: CSS Module
+
+- Make use have `"react-scripts": "3.4.1"` in `package.json`
+
+## Step 1: Create css file
+
+- Create `appStyles.css` css style stylesheet in `src` folder.
+
+## Step 2: Create CSS Module Stylesheet
+
+- Create `appStyles.module.css` in `src` folder
+
+`AppStyles.css`
+
+```css
+.error {
+  color: red;
+}
+```
+
+`appStyles.module.css`
+
+```css
+.success {
+  color: green;
+}
+```
+
+```App.js`
+
+```js
+import React from "react";
+import "./App.css";
+
+import "./appStyles.css";
+import styles from "./appStyles.module.css";
+
+function App() {
+  return (
+    <div className="App">
+      <h1 className="error">Error</h1>
+      <h1 className={styles.success}>Success</h1>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> Here we can see `regular css` and `module css` imported in different way
+
+> We can also look that both are called inside `className` attribute differently.
+
+### Advantages of Module CSS:
+
+- Classes are locally scoped by default.
+
+> regular css `class` is same in all the files whereas the `modules css` class is scoped in the file only Because the file is imported as a variable.
+
+---

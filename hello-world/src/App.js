@@ -1,7 +1,9 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import NameList from "./components/NameList";
+// import Inline from "./components/Inline";
+// import Stylesheet from "./components/Stylesheet";
+// import NameList from "./components/NameList";
 // import UserGreeting from "./components/UserGreeting";
 // import MyGreet from "./components/Greet";
 // import Welcome from "./components/Welcome";
@@ -13,11 +15,18 @@ import NameList from "./components/NameList";
 // import ClassClick from "./components/ClassClick";
 // import EventBind from "./components/EventBind";
 // import ParentComponent from "./components/ParentComponent";
+import "./appStyles.css";
+import styles from "./appStyles.module.css";
 
 function App() {
   return (
     <div className="App">
-      <NameList></NameList>
+      <h1 className="error">Error</h1>
+      <h1 className={styles.success}>Success</h1>
+
+      {/* <Inline></Inline> */}
+      {/* <Stylesheet primary={true}></Stylesheet> */}
+      {/* <NameList></NameList> */}
       {/* <UserGreeting></UserGreeting> */}
       {/* <ParentComponent></ParentComponent> */}
       {/* <EventBind></EventBind> */}
@@ -25,16 +34,13 @@ function App() {
       {/* <FunctionClick></FunctionClick> */}
       {/* <Count></Count> */}
       {/* <Message></Message> */}
-
       {/* <MyGreet name="Imrul" heroName="Superman">
         <p>This is children props</p>
       </MyGreet> */}
       {/* <MyGreet name="Towhid" heroName="Batman">
         <button>Action</button>
       </MyGreet> */}
-
       {/* <MyGreet name="Hasan" heroName="Spiderman"></MyGreet> */}
-
       {/* <Welcome name="Imrul" heroName="Superman">
         <p>Childrens</p>
       </Welcome> */}
