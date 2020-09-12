@@ -2183,3 +2183,457 @@ export default App;
 > regular css `class` is same in all the files whereas the `modules css` class is scoped in the file only Because the file is imported as a variable.
 
 ---
+
+---
+
+# **Basic Of Form Handing**
+
+---
+
+![](MARKDOWN_NOTES/25.png)
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import Form from "./components/Form";
+
+function App() {
+  return (
+    <div className="App">
+      <Form></Form>
+    </div>
+  );
+}
+
+export default App;
+```
+
+## Using Regular Form
+
+`Form.js`
+
+```js
+import React, { Component } from "react";
+
+class Form extends Component {
+  render() {
+    return (
+      <form>
+        <div>
+          <label>Username</label>
+          <input type="text" />
+        </div>
+      </form>
+    );
+  }
+}
+
+export default Form;
+```
+
+> This form is in regular form style.
+
+## Form Using Controlled React Component
+
+Two Steps:
+
+1. create a component state that will controll the input element.
+   Assign the state property as the value of the input element
+2. And then set `onChange` event handler to change the state.
+
+`Form.js`
+
+```js
+import React, { Component } from "react";
+
+class Form extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: "",
+    };
+  }
+
+  render() {
+    return (
+      <form>
+        <div>
+          <label>Username</label>
+          <input type="text" value={this.state.username} />
+        </div>
+      </form>
+    );
+  }
+}
+
+export default Form;
+```
+
+> But here We can see in the browser. No matter what we typing. The input fill is remains null. this is because the username is set to `null`. But we didn't change `onChange`
+
+## Solution
+
+`Form.js`
+
+```js
+import React, { Component } from "react";
+
+class Form extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: "",
+    };
+  }
+
+  handleUsernameChange = (event) => {
+    this.setState({
+      username: event.target.value,
+    });
+  };
+
+  render() {
+    return (
+      <form>
+        <div>
+          <label>Username</label>
+          <input
+            type="text"
+            value={this.state.username}
+            onChange={this.handleUsernameChange}
+          />
+        </div>
+      </form>
+    );
+  }
+}
+
+export default Form;
+```
+
+> Whenever a change in input field. Then the typed value is returned using `event.target.value`. So when `onChange` event, the event will take the value which we are typing in the input field.
+
+---
+
+## Select Input in Form
+
+`Form.js`
+
+```js
+import React, { Component } from "react";
+
+class Form extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: "",
+      comments: "",
+      topic: "react",
+    };
+  }
+
+  handleUsernameChange = (event) => {
+    this.setState({
+      username: event.target.value,
+    });
+  };
+
+  handleCommentsChange = (event) => {
+    this.setState({
+      comments: event.target.value,
+    });
+  };
+
+  handleTopicChange = (event) => {
+    this.setState({
+      topic: event.target.value,
+    });
+  };
+
+  render() {
+    return (
+      <form>
+        <div>
+          <label>Username</label>
+          <input
+            type="text"
+            value={this.state.username}
+            onChange={this.handleUsernameChange}
+          />
+        </div>
+        <div>
+          <label>Comments</label>
+          <textarea
+            type="text"
+            value={this.state.comments}
+            onChange={this.handleCommentsChange}
+          ></textarea>
+        </div>
+        <div>
+          <label>Topic</label>
+          <select value={this.state.topic} onChange={this.handleTopicChange}>
+            <option value="react">React</option>
+            <option value="angular">Angular</option>
+            <option value="vue">Vue</option>
+          </select>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
+}
+
+export default Form;
+```
+
+> Here the submit button function as default submit button which is to refresh a new pages.
+
+> Now we use the javascript functions to handle the submission of the form and the method.
+
+- add `onSubmit={this.handleSubmit}` inside the forms openeing tag
+
+`Form.js`
+
+```js
+import React, { Component } from "react";
+
+class Form extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: "",
+      comments: "",
+      topic: "react",
+    };
+  }
+
+  handleUsernameChange = (event) => {
+    this.setState({
+      username: event.target.value,
+    });
+  };
+
+  handleCommentsChange = (event) => {
+    this.setState({
+      comments: event.target.value,
+    });
+  };
+
+  handleTopicChange = (event) => {
+    this.setState({
+      topic: event.target.value,
+    });
+  };
+
+  handleSubmit = (event) => {
+    alert(`${this.state.username} ${this.state.comments} ${this.state.topic}`);
+  };
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <div>
+          <label>Username</label>
+          <input
+            type="text"
+            value={this.state.username}
+            onChange={this.handleUsernameChange}
+          />
+        </div>
+        <div>
+          <label>Comments</label>
+          <textarea
+            type="text"
+            value={this.state.comments}
+            onChange={this.handleCommentsChange}
+          ></textarea>
+        </div>
+        <div>
+          <label>Topic</label>
+          <select value={this.state.topic} onChange={this.handleTopicChange}>
+            <option value="react">React</option>
+            <option value="angular">Angular</option>
+            <option value="vue">Vue</option>
+          </select>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
+}
+
+export default Form;
+```
+
+> Now when we submit the form we can see the alert in the browser.
+
+> But when we click on `ok` on alert modal then the page refreshes and the inputed data lost. But we want the data should be remain as it is.
+
+- Solution?
+  > We need an `event.preventDefault();` after the `alert` function.
+  > This will prevent the default behavour of the form submission.
+
+`Form.js`
+
+```js
+import React, { Component } from "react";
+
+class Form extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: "",
+      comments: "",
+      topic: "react",
+    };
+  }
+
+  handleUsernameChange = (event) => {
+    this.setState({
+      username: event.target.value,
+    });
+  };
+
+  handleCommentsChange = (event) => {
+    this.setState({
+      comments: event.target.value,
+    });
+  };
+
+  handleTopicChange = (event) => {
+    this.setState({
+      topic: event.target.value,
+    });
+  };
+
+  handleSubmit = (event) => {
+    alert(`${this.state.username} ${this.state.comments} ${this.state.topic}`);
+    event.preventDefault();
+  };
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <div>
+          <label>Username</label>
+          <input
+            type="text"
+            value={this.state.username}
+            onChange={this.handleUsernameChange}
+          />
+        </div>
+        <div>
+          <label>Comments</label>
+          <textarea
+            type="text"
+            value={this.state.comments}
+            onChange={this.handleCommentsChange}
+          ></textarea>
+        </div>
+        <div>
+          <label>Topic</label>
+          <select value={this.state.topic} onChange={this.handleTopicChange}>
+            <option value="react">React</option>
+            <option value="angular">Angular</option>
+            <option value="vue">Vue</option>
+          </select>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
+}
+
+export default Form;
+```
+
+---
+
+## Destructuring the props
+
+`Form.js`
+
+```js
+import React, { Component } from "react";
+
+class Form extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: "",
+      comments: "",
+      topic: "react",
+    };
+  }
+
+  handleUsernameChange = (event) => {
+    this.setState({
+      username: event.target.value,
+    });
+  };
+
+  handleCommentsChange = (event) => {
+    this.setState({
+      comments: event.target.value,
+    });
+  };
+
+  handleTopicChange = (event) => {
+    this.setState({
+      topic: event.target.value,
+    });
+  };
+
+  handleSubmit = (event) => {
+    alert(`${this.state.username} ${this.state.comments} ${this.state.topic}`);
+    event.preventDefault();
+  };
+
+  render() {
+    const { username, comments, topic } = this.state;
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <div>
+          <label>Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={this.handleUsernameChange}
+          />
+        </div>
+        <div>
+          <label>Comments</label>
+          <textarea
+            type="text"
+            value={comments}
+            onChange={this.handleCommentsChange}
+          ></textarea>
+        </div>
+        <div>
+          <label>Topic</label>
+          <select value={topic} onChange={this.handleTopicChange}>
+            <option value="react">React</option>
+            <option value="angular">Angular</option>
+            <option value="vue">Vue</option>
+          </select>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
+}
+
+export default Form;
+```
+
+> Here we assing `const { username, comments, topic } = this.state;` to destructure. and Now no need to use `value={this.state.username}` instead use `{username}`
+
+---
