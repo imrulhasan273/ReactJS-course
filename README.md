@@ -95,6 +95,10 @@ This folder is using most during development
 
 ---
 
+# **----------------------------------------------BASIC REACT---------------------------------------------**
+
+---
+
 # **Components**
 
 ---
@@ -3030,3 +3034,13 @@ export default LifecycleB;
 # Error Handling Phase Method
 
 ![](MARKDOWN_NOTES/39.png)
+
+---
+
+# **----------------------------------------------ADVANCED REACT---------------------------------------------**
+
+---
+
+# **Fragments**
+
+---
