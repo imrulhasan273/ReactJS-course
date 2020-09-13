@@ -2644,4 +2644,209 @@ export default Form;
 
 ![](MARKDOWN_NOTES/26.png)
 
+---
+
 ![](MARKDOWN_NOTES/27.png)
+
+---
+
+# **Mounting Life Cycle Method**
+
+---
+
+## First Method
+
+![](MARKDOWN_NOTES/28.png)
+
+## 2nd Method
+
+![](MARKDOWN_NOTES/29.png)
+
+> As it is static method. It doensn't use `this` keyword inside this.
+
+## 3rd Method
+
+![](MARKDOWN_NOTES/30.png)
+
+## 4th Method
+
+![](MARKDOWN_NOTES/31.png)
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import LifecycleA from "./components/LifecycleA";
+
+function App() {
+  return (
+    <div className="App">
+      <LifecycleA />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`LifecycleA.js`
+
+```js
+import React, { Component } from "react";
+
+class LifecycleA extends Component {
+  //first method
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "Imrul",
+    };
+    console.log("LifeCycleA Constructor");
+  }
+
+  //2nd method
+  static getDerivedStateFromProps(props, state) {
+    console.log("LifeCycleA getDerivedStateFromProps");
+    return null;
+  }
+
+  //4th method
+  componentDidMount() {
+    console.log("LifeCycleA componentDidMount");
+  }
+
+  //3rd method
+  render() {
+    console.log("LifeCycleA render");
+    return <div>Lifecycle A</div>;
+  }
+}
+
+export default LifecycleA;
+```
+
+## Output:
+
+![](MARKDOWN_NOTES/32.png)
+
+---
+
+> What if the compoent have a child component ?
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import LifecycleA from "./components/LifecycleA";
+
+function App() {
+  return (
+    <div className="App">
+      <LifecycleA />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`LifecycleB.js`
+
+```js
+import React, { Component } from "react";
+
+class LifecycleB extends Component {
+  //first method
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "Imrul",
+    };
+    console.log("LifeCycleB Constructor");
+  }
+
+  //2nd method
+  static getDerivedStateFromProps(props, state) {
+    console.log("LifeCycleB getDerivedStateFromProps");
+    return null;
+  }
+
+  //4th method
+  componentDidMount() {
+    console.log("LifeCycleB componentDidMount");
+  }
+
+  //3rd method
+  render() {
+    console.log("LifeCycleB render");
+    return <div>Lifecycle B</div>;
+  }
+}
+
+export default LifecycleB;
+```
+
+> Here `LifecycleB` is the child component.
+
+`LifecycleA.js`
+
+```js
+import React, { Component } from "react";
+import LifecycleB from "./LifecycleB";
+
+class LifecycleA extends Component {
+  //first method
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "Imrul",
+    };
+    console.log("LifeCycleA Constructor");
+  }
+
+  //2nd method
+  static getDerivedStateFromProps(props, state) {
+    console.log("LifeCycleA getDerivedStateFromProps");
+    return null;
+  }
+
+  //4th method
+  componentDidMount() {
+    console.log("LifeCycleA componentDidMount");
+  }
+
+  //3rd method
+  render() {
+    console.log("LifeCycleA render");
+    return (
+      <div>
+        <div>Lifecycle A</div>
+        <LifecycleB />
+      </div>
+    );
+  }
+}
+
+export default LifecycleA;
+```
+
+> Here `LifecycleA` is the parent component.
+
+> And the child component is added in `render` function.
+
+## Output:
+
+![](MARKDOWN_NOTES/33.png)
+
+> Here we can see the order of execution.
+
+```
+
+```
