@@ -6,7 +6,7 @@ class LifecycleB extends Component {
     super(props);
 
     this.state = {
-      name: "Imrul",
+      name: "Django",
     };
     console.log("LifeCycleB Constructor");
   }
@@ -20,6 +20,23 @@ class LifecycleB extends Component {
   //4th method
   componentDidMount() {
     console.log("LifeCycleB componentDidMount");
+  }
+
+  //________________ Update -- #2
+  shouldComponentUpdate() {
+    console.log("LifeCycleB shouldComponentUpdate");
+    return true;
+  }
+
+  //________________ Update -- #4
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    console.log("LifeCycleB getSnapshotBeforeUpdate");
+    return null;
+  }
+
+  //________________ Update --  #5
+  componentDidUpdate() {
+    console.log("LifeCycleB componentDidUpdate");
   }
 
   //3rd method

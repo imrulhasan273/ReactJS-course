@@ -2847,6 +2847,178 @@ export default LifecycleA;
 
 > Here we can see the order of execution.
 
+---
+
+# **Component Updating Lifecycle Methods**
+
+---
+
+## Method 1
+
+![](MARKDOWN_NOTES/34.png)
+
+## Method 2
+
+![](MARKDOWN_NOTES/35.png)
+
+## Method 3
+
+![](MARKDOWN_NOTES/36.png)
+
+## Method 4
+
+![](MARKDOWN_NOTES/37.png)
+
+## Method 5
+
+![](MARKDOWN_NOTES/38.png)
+
+---
+
+## Now example
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import LifecycleA from "./components/LifecycleA";
+
+function App() {
+  return (
+    <div className="App">
+      <LifecycleA />
+    </div>
+  );
+}
+
+export default App;
 ```
 
+`LifecycleA.js`
+
+```js
+import React, { Component } from "react";
+import LifecycleB from "./LifecycleB";
+
+class LifecycleA extends Component {
+  //first method
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "Laravel",
+    };
+    console.log("LifeCycleA Constructor");
+  }
+
+  //2nd method_________+________ Update --#1
+  static getDerivedStateFromProps(props, state) {
+    console.log("LifeCycleA getDerivedStateFromProps");
+    return null;
+  }
+
+  //4th method
+  componentDidMount() {
+    console.log("LifeCycleA componentDidMount");
+  }
+
+  //________________ Update -- #2
+  shouldComponentUpdate() {
+    console.log("LifeCycleA shouldComponentUpdate");
+    return true;
+  }
+
+  //________________ Update -- #4
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    console.log("LifeCycleA getSnapshotBeforeUpdate");
+    return null;
+  }
+
+  //________________ Update --  #5
+  componentDidUpdate() {
+    console.log("LifeCycleA componentDidUpdate");
+  }
+
+  changeState = () => {
+    this.setState({
+      name: "ReactJS",
+    });
+  };
+  //3rd method ________+________ Update -- #3
+  render() {
+    console.log("LifeCycleA render");
+    return (
+      <div>
+        <div>Lifecycle A</div>
+        <button onClick={this.changeState}>Change State</button>
+        <LifecycleB />
+      </div>
+    );
+  }
+}
+
+export default LifecycleA;
 ```
+
+`LifeCycleB.js`
+
+```js
+import React, { Component } from "react";
+
+class LifecycleB extends Component {
+  //first method
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "Django",
+    };
+    console.log("LifeCycleB Constructor");
+  }
+
+  //2nd method
+  static getDerivedStateFromProps(props, state) {
+    console.log("LifeCycleB getDerivedStateFromProps");
+    return null;
+  }
+
+  //4th method
+  componentDidMount() {
+    console.log("LifeCycleB componentDidMount");
+  }
+
+  //________________ Update -- #2
+  shouldComponentUpdate() {
+    console.log("LifeCycleB shouldComponentUpdate");
+    return true;
+  }
+
+  //________________ Update -- #4
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    console.log("LifeCycleB getSnapshotBeforeUpdate");
+    return null;
+  }
+
+  //________________ Update --  #5
+  componentDidUpdate() {
+    console.log("LifeCycleB componentDidUpdate");
+  }
+
+  //3rd method
+  render() {
+    console.log("LifeCycleB render");
+    return <div>Lifecycle B</div>;
+  }
+}
+
+export default LifecycleB;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/39.png)
+
+---
+
+---
