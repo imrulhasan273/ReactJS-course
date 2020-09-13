@@ -3022,3 +3022,11 @@ export default LifecycleB;
 ---
 
 ---
+
+# Unmount Phase Method
+
+![](MARKDOWN_NOTES/39.png)
+
+# Error Handling Phase Method
+
+![](MARKDOWN_NOTES/39.png)
