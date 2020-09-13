@@ -2637,3 +2637,11 @@ export default Form;
 > Here we assing `const { username, comments, topic } = this.state;` to destructure. and Now no need to use `value={this.state.username}` instead use `{username}`
 
 ---
+
+# **Component Life Cycle Method**
+
+---
+
+![](MARKDOWN_NOTES/26.png)
+
+![](MARKDOWN_NOTES/27.png)
