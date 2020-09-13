@@ -37,7 +37,7 @@ Navigate terminal to the folder just created
 Start the npm
 
 ```cmd
-~4 npm start
+~$ npm start
 ``
 ```
 
@@ -95,7 +95,7 @@ This folder is using most during development
 
 ---
 
-# **----------------------------------------------BASIC REACT---------------------------------------------**
+# **BASIC REACT**
 
 ---
 
@@ -3037,7 +3037,7 @@ export default LifecycleB;
 
 ---
 
-# **----------------------------------------------ADVANCED REACT---------------------------------------------**
+# **ADVANCED REACT**
 
 ---
 

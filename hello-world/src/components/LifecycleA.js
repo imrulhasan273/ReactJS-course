@@ -8,6 +8,7 @@ class LifecycleA extends Component {
 
     this.state = {
       name: "Laravel",
+      count: 1,
     };
     console.log("LifeCycleA Constructor");
   }
@@ -41,9 +42,10 @@ class LifecycleA extends Component {
   }
 
   changeState = () => {
-    this.setState({
+    this.setState((prevState, props) => ({
       name: "ReactJS",
-    });
+      count: prevState.count + 1,
+    }));
   };
   //3rd method ________+________ Update -- #3
   render() {
@@ -51,6 +53,9 @@ class LifecycleA extends Component {
     return (
       <div>
         <div>Lifecycle A</div>
+        <div>
+          Name: {this.state.name} : Count: {this.state.count}
+        </div>
         <button onClick={this.changeState}>Change State</button>
         <LifecycleB />
       </div>
