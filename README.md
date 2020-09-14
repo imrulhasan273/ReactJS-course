@@ -3449,3 +3449,114 @@ export default PureComp;
 ![](MARKDOWN_NOTES/50.png)
 
 ---
+
+---
+
+# **Memo**
+
+---
+
+> This is also helps to avoid unwanted renduring but in this case it's for Functional Component.
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ParentComp from "./components/ParentComp";
+
+function App() {
+  return (
+    <div className="App">
+      <ParentComp />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ParentComp.js`
+
+```js
+import React, { Component } from "react";
+import RegComp from "./RegComp";
+import PureComp from "./PureComp";
+import MemoComp from "./MemoComp";
+
+export class ParentComp extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "Imrul",
+    };
+  }
+
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        name: "Imrul",
+      });
+    }, 2000);
+  }
+
+  render() {
+    console.log(
+      "*****************************Parent Component Rendering********************************"
+    );
+    return (
+      <div>
+        Parent Component
+        <MemoComp name={this.state.name} />
+      </div>
+    );
+  }
+}
+
+export default ParentComp;
+```
+
+`MemoComp.js`
+
+```js
+import React from "react";
+
+function MemoComp({ name }) {
+  console.log("Renduring Memo Component");
+  return <div>{name}</div>;
+}
+
+export default MemoComp;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/51.png)
+
+> But till now the `Memo Component` is rerenduring even if for the same state `name : 'Imrul'`.
+
+## Solution?
+
+> use `export default React.memo(MemoComp);` instead of `export default MemoComp;`
+
+`MemoComp.js`
+
+```js
+import React from "react";
+
+function MemoComp({ name }) {
+  console.log("Renduring Memo Component");
+  return <div>{name}</div>;
+}
+
+export default React.memo(MemoComp);
+```
+
+## Output
+
+![](MARKDOWN_NOTES/52.png)
+
+> Here we can see the re-rendering problem is not occurs here.
+
+---
