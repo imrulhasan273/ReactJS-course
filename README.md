@@ -3029,11 +3029,11 @@ export default LifecycleB;
 
 # Unmount Phase Method
 
-![](MARKDOWN_NOTES/39.png)
+![](MARKDOWN_NOTES/40.png)
 
 # Error Handling Phase Method
 
-![](MARKDOWN_NOTES/39.png)
+![](MARKDOWN_NOTES/41.png)
 
 ---
 
@@ -3042,5 +3042,249 @@ export default LifecycleB;
 ---
 
 # **Fragments**
+
+---
+
+## Def:
+
+> Fragments basically lets you group a list of children elements without adding extra nodes to the DOM.
+
+## Example 1:
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import FragmentDemo from "./components/FragmentDemo";
+
+function App() {
+  return (
+    <div className="App">
+      <FragmentDemo></FragmentDemo>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`FragmentDemo.js`
+
+```js
+import React from "react";
+
+function FragmentDemo() {
+  return (
+    <div>
+      <h1>Fragment Demo</h1>
+      <p>
+        Paragraphs Paragraphs Paragraphs Paragraphs Paragraphs Paragraphs
+        Paragraphs
+      </p>
+    </div>
+  );
+}
+
+export default FragmentDemo;
+```
+
+## Output:
+
+![](MARKDOWN_NOTES/42.png)
+
+> Here we can wee we need an extra `<div></div>` (node) tag here.
+
+### To Optimize this we have Fragments
+
+`FragmentDemo.js`
+
+```js
+import React from "react";
+
+function FragmentDemo() {
+  return (
+    <React.Fragment>
+      <h1>Fragment Demo</h1>
+      <p>
+        Paragraphs Paragraphs Paragraphs Paragraphs Paragraphs Paragraphs
+        Paragraphs
+      </p>
+    </React.Fragment>
+  );
+}
+
+export default FragmentDemo;
+```
+
+> Here we use `<React.Fragment>` instead of `<div></div>`. So that one extra node is not here.
+
+## Output:
+
+![](MARKDOWN_NOTES/43.png)
+
+> We can see no `extra node` here.
+
+---
+
+## Example 2:
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import Table from "./components/Table";
+
+function App() {
+  return (
+    <div className="App">
+      <Table />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`Table.js`
+
+```js
+import React from "react";
+import Columns from "./Columns";
+
+function Table() {
+  return (
+    <table>
+      <tbody>
+        <tr>
+          <Columns />
+        </tr>
+      </tbody>
+    </table>
+  );
+}
+
+export default Table;
+```
+
+`Columns.js`
+
+```js
+import React from "react";
+
+function Columns() {
+  return (
+    <div>
+      <td>Name</td>
+      <td>Imrul</td>
+    </div>
+  );
+}
+
+export default Columns;
+```
+
+## Output:
+
+![](MARKDOWN_NOTES/44.png)
+
+> Here we can see output is allright. But warnings appears in consol.
+
+> Warnings Means: It's wrong to have a `<td>` element as a child of a `div>` tag.
+
+## Reason
+
+![](MARKDOWN_NOTES/45.png)
+
+> We can see `td` is a child of `div` here. But it is wrong syntax. But for multiple element returning it is necessary to use `div` tag to bind them all. But it also wrong syntax in table.
+
+## Solution
+
+> Use `<React.Fragment><\React.Fragment>` to solve both problems
+
+`Columns.js`
+
+```js
+import React from "react";
+
+function Columns() {
+  return (
+    <React.Fragment>
+      <td>Name</td>
+      <td>Imrul</td>
+    </React.Fragment>
+  );
+}
+
+export default Columns;
+```
+
+---
+
+## Key Point of Fragment:
+
+- it accepts the `key` attribute when renduring list of items.
+
+## Example:
+
+`Columns.js`
+
+```js
+import React from "react";
+
+function Columns() {
+  const items = [];
+  return (
+    <React.Fragment>
+      {items.map((item) => (
+        <React.Fragment key={item.id}>
+          <h1>Title</h1>
+          <p>{item.title}</p>
+        </React.Fragment>
+      ))}
+      <td>Name</td>
+      <td>Imrul</td>
+    </React.Fragment>
+  );
+}
+
+export default Columns;
+```
+
+> It can pass the `key` to `Fragments`
+
+---
+
+> Is there any alternative of `</React.Fragment>`? Yes.
+
+`Columns.js`
+
+```js
+import React from "react";
+
+function Columns() {
+  return (
+    <>
+      <td>Name</td>
+      <td>Imrul</td>
+    </>
+  );
+}
+
+export default Columns;
+```
+
+> We can use `<></>` instead of `<React.Fragment></React.Fragment>` to render multiple elements
+
+**BUT IT HAS ONE LIMITATION**
+
+> We can not pass the `key` attribute as there are no `fragments`.
+
+---
+
+---
+
+# **Pure Components**
 
 ---
