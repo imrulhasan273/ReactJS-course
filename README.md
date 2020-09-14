@@ -3288,3 +3288,164 @@ export default Columns;
 # **Pure Components**
 
 ---
+
+## Shortcut `rpce` and tab
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import PureComp from "./components/PureComp";
+
+function App() {
+  return (
+    <div className="App">
+      <PureComp></PureComp>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`PureComp.js`
+
+```js
+import React, { PureComponent } from "react";
+
+class PureComp extends PureComponent {
+  render() {
+    return <div>Pure Component</div>;
+  }
+}
+
+export default PureComp;
+```
+
+---
+
+> Output remains exactly same as `Regular Component` and this `Pure Component` class.
+
+> What is the difference then?
+
+## Example
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ParentComp from "./components/ParentComp";
+
+function App() {
+  return (
+    <div className="App">
+      <ParentComp />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ParentComp.js`
+
+```js
+import React, { Component } from "react";
+import RegComp from "./RegComp";
+import PureComp from "./PureComp";
+
+export class ParentComp extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "Imrul",
+    };
+  }
+
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        name: "Imrul",
+      });
+    }, 2000);
+  }
+
+  render() {
+    console.log(
+      "*****************************Parent Component Rendering********************************"
+    );
+    return (
+      <div>
+        Parent Component
+        <RegComp name={this.state.name} />
+        <PureComp name={this.state.name} />
+      </div>
+    );
+  }
+}
+
+export default ParentComp;
+```
+
+`RegComp.js`
+
+```js
+import React, { Component } from "react";
+
+class RegComp extends Component {
+  render() {
+    console.log("Regular Component Rendering");
+    return <div>Regular Component : {this.props.name}</div>;
+  }
+}
+
+export default RegComp;
+```
+
+`PureComp.js`
+
+```js
+import React, { PureComponent } from "react";
+
+class PureComp extends PureComponent {
+  render() {
+    console.log("Pure Component Rendering");
+    return <div>Pure Component : {this.props.name}</div>;
+  }
+}
+
+export default PureComp;
+```
+
+## Output:
+
+![](MARKDOWN_NOTES/46.png)
+
+> Here in the console we can see the `Pure Component` renders for first render. But after that the `Regular Component` is rendering. This is the difference between the `Regular Componet` and `Pure Component`.
+
+![](MARKDOWN_NOTES/47.png)
+
+![](MARKDOWN_NOTES/48.png)
+
+![](MARKDOWN_NOTES/49.png)
+
+## Usefulness of Pure Componet:
+
+- preventing unnecassary render can give you a performance boost in certain scenarios
+
+## One Problem
+
+- Should not mutate object or arrays in props or state. for example if you have list of items. You want to insert a new item. Because the reference of the array never changes and because pure component only checks for that the component will not re-render even of there is a difference.
+
+### Solutiion?
+
+- Always return a new object or array when dealing with pure components.
+
+## Summary
+
+![](MARKDOWN_NOTES/50.png)
+
+---
