@@ -3560,3 +3560,232 @@ export default React.memo(MemoComp);
 > Here we can see the re-rendering problem is not occurs here.
 
 ---
+
+---
+
+# **Refs**
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import RefsDemo from "./components/RefsDemo";
+
+function App() {
+  return (
+    <div className="App">
+      <RefsDemo />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`RefsDemo.js`
+
+```js
+import React, { Component } from "react";
+
+class RefsDemo extends Component {
+  render() {
+    return (
+      <div>
+        <input type="text" />
+      </div>
+    );
+  }
+}
+
+export default RefsDemo;
+```
+
+> Here we can see in the browser a input text field.
+
+> But we want to focus on the text field as soon as the page loaded.
+
+---
+
+## Solution: Steps
+
+- create a `ref` using `React.createRef();` inside the `constructor`
+- attach the `ref` to the input element in the render method
+  - to attach the `ref` we make use the reserved word `ref`
+- call the focus method on the input element.
+
+## Before Calling the third steps we just check the console to observe `ref`
+
+`RefDemo.js`
+
+```js
+import React, { Component } from "react";
+
+class RefsDemo extends Component {
+  constructor(props) {
+    super(props);
+
+    this.inputRef = React.createRef();
+  }
+
+  componentDidMount() {
+    console.log(this.inputRef);
+  }
+  render() {
+    return (
+      <div>
+        <input type="text" ref={this.inputRef} />
+      </div>
+    );
+  }
+}
+
+export default RefsDemo;
+```
+
+![](MARKDOWN_NOTES/53.png)
+
+> We can clearly see the `ref` property called current of type `input` and this current property points to the actual DOM node.
+
+> To focus on the input element in componentDidMount we simply call the focus method on the current property.
+
+`RefDemo.js`
+
+```js
+import React, { Component } from "react";
+
+class RefsDemo extends Component {
+  constructor(props) {
+    super(props);
+
+    //#1 step
+    this.inputRef = React.createRef();
+  }
+
+  // #3 step
+  componentDidMount() {
+    this.inputRef.current.focus();
+    console.log(this.inputRef);
+  }
+  render() {
+    return (
+      <div>
+        {/* #2 step */}
+        <input type="text" ref={this.inputRef} />
+      </div>
+    );
+  }
+}
+
+export default RefsDemo;
+```
+
+> Now we can check on the browser the input text field is focused as soon as the page loaded.
+
+---
+
+## 2nd Possible Use Case of using `Refs`
+
+`RefsDemo.js`
+
+```js
+import React, { Component } from "react";
+
+class RefsDemo extends Component {
+  constructor(props) {
+    super(props);
+    //#1 step
+    this.inputRef = React.createRef();
+  }
+
+  //#3 step
+  componentDidMount() {
+    this.inputRef.current.focus();
+    console.log(this.inputRef);
+  }
+
+  clickHandler = () => {
+    alert(this.inputRef.current.value);
+  };
+  render() {
+    return (
+      <div>
+        <input type="text" ref={this.inputRef} />
+        {/* #2 step */}
+        <button onClick={this.clickHandler}>Click</button>
+      </div>
+    );
+  }
+}
+
+export default RefsDemo;
+```
+
+## Output:
+
+![](MARKDOWN_NOTES/54.png)
+
+![](MARKDOWN_NOTES/55.png)
+
+## Alternative of `Refs` using `CallbackRefs`
+
+- Its older approach. But showing it for just to learn
+
+### Steps
+
+Four steps
+
+`RefsDemo.js`
+
+```js
+import React, { Component } from "react";
+
+class RefsDemo extends Component {
+  constructor(props) {
+    super(props);
+
+    //#1 step
+    this.cbRef = null;
+
+    //#2 step
+    this.setCbRef = (element) => {
+      this.cbRef = element;
+    };
+  }
+
+  componentDidMount() {
+    //#4 step
+    if (this.cbRef) {
+      this.cbRef.focus();
+      console.log(this.cbRef);
+    }
+  }
+
+  clickHandler = () => {
+    alert(this.cbRef.value);
+  };
+  render() {
+    return (
+      <div>
+        {/* #3 */}
+        <input type="text" ref={this.setCbRef} />
+        <button onClick={this.clickHandler}>Click</button>
+      </div>
+    );
+  }
+}
+
+export default RefsDemo;
+```
+
+## Documentation [Docx](https://reactjs.org/docs/refs-and-the-dom.html)
+
+---
+
+---
+
+# **Refs with Class Components**
+
+---
