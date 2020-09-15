@@ -3878,3 +3878,97 @@ export default Input;
 ---
 
 ---
+
+# **Forwarding Refs**
+
+---
+
+## 4 Steps
+
+- Create a `ref` in the parent component.
+- attach the `ref` to the child component using the `ref` attribute.
+- we need to forward this `ref` to the input element in the child component.
+  - forwarding can be achieved usign the forward draft method from the react library.
+  - Modify the child functional component of `FRInput.js` to the arrow function.
+  - To forward the `ref` we will use the `React.ForwardRef` method.
+- define the `clickHandler` and set `this.inputRef.current.focus();`
+
+## Code
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import FRParentInput from "./components/FRParentInput";
+
+function App() {
+  return (
+    <div className="App">
+      <FRParentInput />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`FRParentInput.js`
+
+```js
+import React, { Component } from "react";
+import FRInput from "./FRInput";
+
+class FRParentInput extends Component {
+  constructor(props) {
+    super(props);
+
+    // #1 step
+    this.inputRef = React.createRef();
+  }
+
+  // #4 step
+  clickHandler = () => {
+    this.inputRef.current.focus();
+  };
+
+  render() {
+    return (
+      <div>
+        {/* #2 step */}
+        <FRInput ref={this.inputRef} />
+        <button onClick={this.clickHandler}>Focus Input</button>
+      </div>
+    );
+  }
+}
+
+export default FRParentInput;
+```
+
+`FRInput.js`
+
+```js
+import React from "react";
+
+// #3 step
+const FRInput = React.forwardRef((props, ref) => {
+  return (
+    <div>
+      <input type="text" ref={ref} />
+    </div>
+  );
+});
+
+export default FRInput;
+```
+
+> Same exact output.
+
+> We can see after pressing button the focus goes on the input field.
+
+> Advantages: Parent Compent can directly interact with the input elelment in the child component using `ref` thorugh passing the `ref` in the `arrow function` in child component.
+
+---
+
+---
