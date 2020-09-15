@@ -3789,3 +3789,92 @@ export default RefsDemo;
 # **Refs with Class Components**
 
 ---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import FocusInput from "./components/FocusInput";
+
+function App() {
+  return (
+    <div className="App">
+      <FocusInput />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`FocusInput.js`
+
+```js
+import React, { Component } from "react";
+import Input from "./Input";
+
+class FocusInput extends Component {
+  constructor(props) {
+    super(props);
+
+    // #1 step
+    this.componentRef = React.createRef();
+  }
+
+  // #3 step
+  clickHandler = () => {
+    this.componentRef.current.focusInput();
+  };
+
+  render() {
+    return (
+      <div>
+        {/* #2 step */}
+        <Input ref={this.componentRef} />
+        <button onClick={this.clickHandler}>Focus Input</button>
+      </div>
+    );
+  }
+}
+
+export default FocusInput;
+```
+
+`Input.js`
+
+```js
+import React, { Component } from "react";
+
+class Input extends Component {
+  constructor(props) {
+    super(props);
+
+    // #1 step
+    this.inputRef = React.createRef();
+  }
+
+  // #3 step -- this functon will be called from Parent Component
+  focusInput() {
+    this.inputRef.current.focus();
+  }
+  render() {
+    return (
+      <div>
+        {/* #2 step */}
+        <input type="test" ref={this.inputRef} />
+      </div>
+    );
+  }
+}
+
+export default Input;
+```
+
+> this is `ref` using Class Component.
+
+> **Note:** Refs can't attach to the functional component. It can only be used using class component.
+
+---
+
+---
