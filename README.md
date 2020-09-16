@@ -3972,3 +3972,156 @@ export default FRInput;
 ---
 
 ---
+
+# **Portals**
+
+---
+
+- **Def:** Provide a way to render children into a DOM node that exists outside the DOM Hierarchy of the parent component.
+
+![](MARKDOWN_NOTES/56.png)
+
+> We can see every single application is under the `root`.
+
+- Portals provide the ability to break out of this DOM tree so you can render a component onto a DOM node that is not under this `root` element.
+
+## Steps:
+
+### Step 1:
+
+- Create a new element with `id="portal-root"` inside `index.html` in `public` folder.
+
+```html
+<div id="portal-root"></div>
+```
+
+`index.html`
+
+```html
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <div id="portal-root"></div>
+</body>
+```
+
+### Step 2:
+
+- Create a new component `PortalDemo.js` inside the `component` folder.
+
+- Add the `component` in the `App.js` file.
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import PortalDemo from "./components/PortalDemo";
+
+function App() {
+  return (
+    <div className="App">
+      <PortalDemo />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`PortalDemo.js`
+
+```js
+import React from "react";
+
+function PortalDemo() {
+  return <h1>Portals Demo</h1>;
+}
+
+export default PortalDemo;
+```
+
+> We can see that the `JSX` is showing inside the element with `id=root`.
+
+### Step 3:
+
+- We will use `ReactDom.createPortal` method to insert this component under the `portal-root` node.
+
+- We need to import `import ReactDOM from "react-dom"` package top of the `PortalDemo.js` file.
+
+- In the `render` method instead of simply return the `JSX` we will return `ReactDOM.createPortal`
+  - The method takes two parameters.
+    - First Parameter: `JSX`
+    - Second Parameter: `DOM Node` to mount the element.
+
+`PortalDemo.js`
+
+```js
+import React from "react";
+import ReactDOM from "react-dom";
+
+function PortalDemo() {
+  return ReactDOM.createPortal(
+    <h1>Portals Demo</h1>,
+    document.getElementById("portal-root")
+  );
+}
+
+export default PortalDemo;
+```
+
+![](MARKDOWN_NOTES/57.png)
+
+> We can see now, that the `JSX` is under the `portal-root` element.
+
+> **Note:** One thing you notice that, All the children component is under `App` component. And the `App` component is mounted on the `root` DOM node, its possible to break away from that and mount on any DOM node you wish to using `ract portals`. So here although the `JSX` should be under the `App` component but instead it is under the `portal-root` element.
+
+---
+
+# More Advance on Portals`
+
+> the first parameter to create portal can be any element that react can render it. It can be `numbers, strings, JSX, component`.
+
+## **Question:** Why do we need them? What are the use case?
+
+- having to deal with the parent components CSS when that child component is a modal a pop-up or a tool-tip
+
+## Example
+
+### Code:
+
+- [link1](https://codesandbox.io/s/00254q4n6p)
+
+## Output
+
+### Normal Case
+
+![](MARKDOWN_NOTES/58.png)
+
+## Case 1: with portals
+
+![](MARKDOWN_NOTES/59.png)
+
+> Modal looks fine
+
+## Case 2: without portals
+
+![](MARKDOWN_NOTES/60.png)
+
+> Modal breaks. Because when it is under the `App` component directly then the `CSS` inside the `App` also reflects the `modal`. Because of the width restriction and that messes up the UI. So sometimes its useful to insert a child into a different location in the DOM and portals helps you do that.
+
+---
+
+## Portals is event bubbling
+
+> Even though a portal can be anywhere in the DOM tree it behaves like a normal react child in every other way. This includes event bubbling. So an event fired from inside a portal will propegate to ancecstors in the containing react tree even if those elements are not ancestors in the DOM tree.
+
+## Example
+
+### Code:
+
+- [Link2](https://codepen.io/gaearon/pen/jGBWpE)
+
+- CLick on the `click` button and you can observe that the portal is behaving like a normal react in every other way.
+
+---
