@@ -4125,3 +4125,217 @@ export default PortalDemo;
 - CLick on the `click` button and you can observe that the portal is behaving like a normal react in every other way.
 
 ---
+
+---
+
+# **Error Boundary**
+
+---
+
+## Error Handling Phase Method
+
+![](MARKDOWN_NOTES/61.png)
+
+### This error may comes.
+
+![](MARKDOWN_NOTES/62.png)
+
+- React Basically unmount the whole react component tree
+
+- We can catch the error and display a fallback UI.
+
+### Error Boundary
+
+![](MARKDOWN_NOTES/63.png)
+
+---
+
+## Example
+
+### Step 1
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import Hero from "./components/Hero";
+
+function App() {
+  return (
+    <div className="App">
+      <Hero heroName="Batman" />
+      <Hero heroName="Superman" />
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Step 2
+
+`Hero.js`
+
+```js
+import React from "react";
+
+function Hero({ heroName }) {
+  if (heroName == "Jocker") {
+    throw new Error("Not A Hero");
+  }
+  return <div>{heroName}</div>;
+}
+
+export default Hero;
+```
+
+## Output shows both the `Batman` and `Superman`.
+
+But now add this `<Hero heroName="Joker" />` to `App` component will produces an error in entire application.
+
+> But only the responsible code should be fallback an UI for error. Not entire application.
+
+## Solution: Using Error Boundary.
+
+- Create a new file named `ErrorBoundary.js` in component folder.
+
+- To catch the error boundary we need to define either `getDerivedFromStateFromError` or `componentDidCatch` life cycle method.
+
+- wrap all the components for `<Hero>` inside the `<ErrorBoundary>` compoennt. So `<ErrorBoundary>` component is `Parent` in this case and `<Hero>` components are the childs.
+
+### Step 1
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ErrorBoundary from "./components/ErrorBoundary";
+import Hero from "./components/Hero";
+
+function App() {
+  return (
+    <div className="App">
+      <ErrorBoundary>
+        <Hero heroName="Batman" />
+        <Hero heroName="Superman" />
+        <Hero heroName="Joker" />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> Wrapping all the `Hero` component inside `ErrorBoudnary` component.
+
+`Hero.js`
+
+```js
+import React from "react";
+
+function Hero({ heroName }) {
+  if (heroName == "Joker") {
+    throw new Error("Not A Hero");
+  }
+  return <div>{heroName}</div>;
+}
+
+export default Hero;
+```
+
+> Same as it is
+
+`ErrorBoundary.js`
+
+```js
+import React, { Component } from "react";
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hasError: false,
+    };
+  }
+
+  // if an error comes then state property `hasError` will be true
+  static getDerivedStateFromError(error) {
+    return {
+      hasError: true,
+    };
+  }
+
+  render() {
+    // if hasError == true
+    if (this.state.hasError) {
+      return <h1>Something Went Wrong</h1>;
+    }
+
+    // if hasError == false
+    return this.props.children; //this refers to the component we are actually rendering
+  }
+}
+
+export default ErrorBoundary;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/64.png)
+
+> Aftr pressing the cross sign.
+
+![](MARKDOWN_NOTES/65.png)
+
+> We can see in the Browser that still the error although we set e Error Message to display `Something went wrong`.
+
+> **Reason:** In the Developemnt the catch of error display will not visible directly. After pressing the cross sign the error message will disply. But in the Production it will works without showing the errors.
+
+---
+
+## Where to place the `Error Boundary`?
+
+- But notice when displaying in the browser, we can see that for error in one `Hero` component others `Hero` component is not visible. But we don't want it. We don't want all the components hide just because one component is in error.
+
+### Solution?
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ErrorBoundary from "./components/ErrorBoundary";
+import Hero from "./components/Hero";
+
+function App() {
+  return (
+    <div className="App">
+      <ErrorBoundary>
+        <Hero heroName="Batman" />
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <Hero heroName="Superman" />
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <Hero heroName="Joker" />
+      </ErrorBoundary>
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Output
+
+![](MARKDOWN_NOTES/66.png)
+
+> Now displaying other `Hero` component also with the error also.
+
+---
