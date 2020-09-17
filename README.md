@@ -4204,7 +4204,7 @@ But now add this `<Hero heroName="Joker" />` to `App` component will produces an
 
 - wrap all the components for `<Hero>` inside the `<ErrorBoundary>` compoennt. So `<ErrorBoundary>` component is `Parent` in this case and `<Hero>` components are the childs.
 
-### Step 1
+## Technique 1 : getDerivedFromStateFromError
 
 `App.js`
 
@@ -4337,5 +4337,67 @@ export default App;
 ![](MARKDOWN_NOTES/66.png)
 
 > Now displaying other `Hero` component also with the error also.
+
+---
+
+## Technique 2 : componentDidCatch
+
+- `componentDidCatch` takes two parameter
+  - error, info
+
+Add Below function before rendering in `ErrorBoundary.js`
+
+```js
+componentDidCatch(error, info) {
+    console.log(error);
+    console.log(info);
+}
+```
+
+`ErrorBoundary.js`
+
+```js
+import React, { Component } from "react";
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hasError: false,
+    };
+  }
+
+  // tech #1
+  static getDerivedStateFromError(error) {
+    return {
+      hasError: true,
+    };
+  }
+
+  // tech #2
+  componentDidCatch(error, info) {
+    console.log(error);
+    console.log(info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something Went Wrong</h1>;
+    }
+    return this.props.children; //this refers to the component we are actually rendering
+  }
+}
+
+export default ErrorBoundary;
+```
+
+> We can see the log in console.
+
+> Final Points: You should know that Error Boundaries catch errors during rendering in life cycle method and in the constructors of the whole tree below them. However they do not catch errors inside event handlers, if you have an onclick handler and want to catch an error you just need to use the regular `try catch statements` and not `error boundaries`.
+
+### Summary:
+
+![](MARKDOWN_NOTES/67.png)
 
 ---

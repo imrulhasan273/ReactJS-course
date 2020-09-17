@@ -9,10 +9,17 @@ class ErrorBoundary extends Component {
     };
   }
 
+  // tech #1
   static getDerivedStateFromError(error) {
     return {
       hasError: true,
     };
+  }
+
+  // tech #2
+  componentDidCatch(error, info) {
+    console.log(error);
+    console.log(info);
   }
 
   render() {
