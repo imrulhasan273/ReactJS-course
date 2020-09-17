@@ -4529,3 +4529,368 @@ export default HoverCounter;
 - Higher Order Component
 
 ---
+
+# **Higher Order Components (Part 2)** | **HOC**
+
+---
+
+![](MARKDOWN_NOTES/70.png)
+
+![](MARKDOWN_NOTES/71.png)
+
+## Code
+
+## Steps
+
+-
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClickCounter from "./components/ClickCounter";
+import HoverCounter from "./components/HoverCounter";
+
+function App() {
+  return (
+    <div className="App">
+      <ClickCounter />
+      <HoverCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`withCounter.js`
+
+```js
+import React, { Component } from "react";
+
+const UpdatedComponent = (OriginalComponent) => {
+  class NewComponent extends React.Component {
+    render() {
+      return <OriginalComponent name="Imrul" />;
+    }
+  }
+  return NewComponent;
+};
+
+export default UpdatedComponent;
+```
+
+`ClickCounter.js`
+
+```js
+import React, { Component } from "react";
+import UpdatedCompoent from "./withCounter"; //added for HOC
+
+class ClickCounter extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increamentCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count + 1 };
+    });
+  };
+
+  render() {
+    const { count } = this.state;
+    return (
+      <div>
+        <button onClick={this.increamentCount}>
+          {this.props.name} Click {count} Times
+        </button>
+      </div>
+    );
+  }
+}
+
+export default UpdatedComponent(ClickCounter); //here is a change from normal export
+```
+
+> Here `ClickCounter` is passed as parameter in `UpdatedComponent` and then then export it
+
+`HoverCounter.js`
+
+```js
+import React, { Component } from "react";
+import UpdatedCompoent from "./withCounter"; //added for HOC
+
+class HoverCounter extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increamentCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count + 1 };
+    });
+  };
+
+  render() {
+    const { count } = this.state;
+    return (
+      <div>
+        <h2 onMouseOver={this.increamentCount}>
+          {this.props.name} Hover {count} Times
+        </h2>
+      </div>
+    );
+  }
+}
+
+export default UpdatedComponent(HoverCounter); //here is a change from normal export
+```
+
+> Here `HoverCounter` is passed as parameter in `UpdatedComponent` and then then export it
+
+## Output
+
+![](MARKDOWN_NOTES/72.png)
+
+> So out HOC injects a named property to any component required for our couter example though that is not really what we want.
+
+> We want counter functionality to be shared amongs the components.
+
+---
+
+## Counter and Hover shared with HOC
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClickCounter from "./components/ClickCounter";
+import HoverCounter from "./components/HoverCounter";
+
+function App() {
+  return (
+    <div className="App">
+      <ClickCounter />
+      <HoverCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`withCounter.js`
+
+```js
+import React, { Component } from "react";
+
+const UpdatedComponent = (OriginalComponent) => {
+  class NewComponent extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        count: 0,
+      };
+    }
+
+    increamentCount = () => {
+      this.setState((prevState) => {
+        return { count: prevState.count + 1 };
+      });
+    };
+
+    render() {
+      return (
+        <OriginalComponent
+          count={this.state.count}
+          increamentCount={this.increamentCount}
+        />
+      );
+    }
+  }
+  return NewComponent;
+};
+
+export default UpdatedComponent;
+```
+
+> Here it accepts `OriginalComponent` as its parameter and return `NewComponent`.
+
+> OriginalComponent referes to `ClickCounter` or `HoverCounter`.
+
+> The `NewComponent` has functionality to maintian the state of account property and also a method to increament the Current Property. Both of them are passed as props to the `OriginalComponent`.
+
+> The `OriginalComponent` enhance with these props and then return.
+
+> The Control goes back to `ClickCounter` where the count and increamentCount props passed in from the `HOC` are destructurd and are used in the return statement.
+
+> So the HOC is basically taking care of maintaining the state and increamenting it.
+
+> Here we passed down the `state` and `increamentCount` method as props so that the `OriginalComponent` will make use of that functionality.
+
+> Same thing happens for `HoverCounter`
+
+> **Note:** Both `ClickCounter` and `HoverCounter` uses separate state. THey don't affects others state.
+
+`ClickCounter.js`
+
+```js
+import React, { Component } from "react";
+import UpdatedComponent from "./withCounter"; //added for HOC
+
+class ClickCounter extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+    return (
+      <div>
+        <button onClick={increamentCount}> Click {count} Times</button>
+      </div>
+    );
+  }
+}
+
+export default UpdatedComponent(ClickCounter); //added
+```
+
+> Here we `destructure` the props into `count` and `increamentCount`.
+
+`HoverCounter.js`
+
+```js
+import React, { Component } from "react";
+import UpdatedComponent from "./withCounter"; //added
+
+class HoverCounter extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+    return (
+      <div>
+        <h2 onMouseOver={increamentCount}> Hover {count} Times</h2>
+      </div>
+    );
+  }
+}
+
+export default UpdatedComponent(HoverCounter); //added
+```
+
+> Here we `destructure` the props into `count` and `increamentCount`.
+
+## Output
+
+![](MARKDOWN_NOTES/73.png)
+
+> We can see the same output as before. But this time we don't have duplicate code. We just re-use the code snippet for counting for both the `ClickCounter` and `HoverCounter`.
+
+---
+
+## Using Some Naming Convension for HOC
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClickCounter from "./components/ClickCounter";
+import HoverCounter from "./components/HoverCounter";
+
+function App() {
+  return (
+    <div className="App">
+      <ClickCounter />
+      <HoverCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`withCounter.js`
+
+```js
+import React, { Component } from "react";
+
+const withCounter = (WrappedComponent) => {
+  class withCounter extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        count: 0,
+      };
+    }
+
+    increamentCount = () => {
+      this.setState((prevState) => {
+        return { count: prevState.count + 1 };
+      });
+    };
+
+    render() {
+      return (
+        <WrappedComponent
+          count={this.state.count}
+          increamentCount={this.increamentCount}
+        />
+      );
+    }
+  }
+  return withCounter;
+};
+
+export default withCounter;
+```
+
+`ClickCounter.js`
+
+```js
+import React, { Component } from "react";
+import withCounter from "./withCounter"; //added for HOC
+
+class ClickCounter extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+    return (
+      <div>
+        <button onClick={increamentCount}> Click {count} Times</button>
+      </div>
+    );
+  }
+}
+
+export default withCounter(ClickCounter); //added
+```
+
+`HoverCounter.js`
+
+```js
+import React, { Component } from "react";
+import withCounter from "./withCounter"; //added
+
+class HoverCounter extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+    return (
+      <div>
+        <h2 onMouseOver={increamentCount}> Hover {count} Times</h2>
+      </div>
+    );
+  }
+}
+
+export default withCounter(HoverCounter); //added
+```
+
+---
