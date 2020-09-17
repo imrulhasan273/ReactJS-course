@@ -4894,3 +4894,205 @@ export default withCounter(HoverCounter); //added
 ```
 
 ---
+
+# **Passed props thought `ClickComponent` from `App`**
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClickCounter from "./components/ClickCounter";
+import HoverCounter from "./components/HoverCounter";
+
+function App() {
+  return (
+    <div className="App">
+      <ClickCounter name="Imrul" />
+      <HoverCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+> Here we pass a property name to `ClickCounter`.
+
+`ClickCounter.js`
+
+```js
+import React, { Component } from "react";
+import withCounter from "./withCounter"; //added for HOC
+
+class ClickCounter extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+    return (
+      <div>
+        <button onClick={increamentCount}>
+          {this.props.name} Click {count} Times
+        </button>
+      </div>
+    );
+  }
+}
+
+export default withCounter(ClickCounter); //added
+```
+
+> We set `{this.props.name}` into the return statement. But props is not showing.
+
+> Why? Because we don't pass the props directly to the `ClickController` when using `HOC`. The props is send to the `HOC` here which is `withCounter`.
+
+> We need to send the props from `HOC`.
+
+`withCounter.js`
+
+```js
+import React, { Component } from "react";
+
+const withCounter = (WrappedComponent) => {
+  class withCounter extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        count: 0,
+      };
+    }
+
+    increamentCount = () => {
+      this.setState((prevState) => {
+        return { count: prevState.count + 1 };
+      });
+    };
+
+    render() {
+      return (
+        <WrappedComponent
+          count={this.state.count}
+          increamentCount={this.increamentCount}
+          {...this.props}
+        />
+      );
+    }
+  }
+  return withCounter;
+};
+
+export default withCounter;
+```
+
+> Here using `{...this.props}` we passed all the props to `WrappedComponent`. If no props availbale for `WrappedComponent` then nothing will send.
+
+---
+
+## Passing Parameters to the HOC.
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClickCounter from "./components/ClickCounter";
+import HoverCounter from "./components/HoverCounter";
+
+function App() {
+  return (
+    <div className="App">
+      <ClickCounter name="Imrul" />
+      <HoverCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`withCounter.js`
+
+```js
+import React, { Component } from "react";
+
+const withCounter = (WrappedComponent, increamentNumber) => {
+  class withCounter extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        count: 0,
+      };
+    }
+
+    increamentCount = () => {
+      this.setState((prevState) => {
+        return { count: prevState.count + increamentNumber };
+      });
+    };
+
+    render() {
+      return (
+        <WrappedComponent
+          count={this.state.count}
+          increamentCount={this.increamentCount}
+          {...this.props}
+        />
+      );
+    }
+  }
+  return withCounter;
+};
+
+export default withCounter;
+```
+
+> `const withCounter = (WrappedComponent, increamentNumber)`
+
+`ClickCounter.js`
+
+```js
+import React, { Component } from "react";
+import withCounter from "./withCounter"; //added for HOC
+
+class ClickCounter extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+    return (
+      <div>
+        <button onClick={increamentCount}>
+          {this.props.name} Click {count} Times
+        </button>
+      </div>
+    );
+  }
+}
+
+export default withCounter(ClickCounter, 5);
+```
+
+> `export default withCounter(ClickCounter, 5);`
+
+`HoverCounter.js`
+
+```js
+import React, { Component } from "react";
+import withCounter from "./withCounter"; //added
+
+class HoverCounter extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+    return (
+      <div>
+        <h2 onMouseOver={increamentCount}> Hover {count} Times</h2>
+      </div>
+    );
+  }
+}
+
+export default withCounter(HoverCounter, 10); //added
+```
+
+> `export default withCounter(HoverCounter, 10);`
+
+---
