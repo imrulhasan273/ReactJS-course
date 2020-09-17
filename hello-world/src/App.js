@@ -1,6 +1,8 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
+import ClickCounter from "./components/ClickCounter";
+import HoverCounter from "./components/HoverCounter";
 // import Inline from "./components/Inline";
 // import Stylesheet from "./components/Stylesheet";
 // import NameList from "./components/NameList";
@@ -27,13 +29,15 @@ import "./App.css";
 // import FocusInput from "./components/FocusInput";
 // import FRParentInput from "./components/FRParentInput";
 // import PortalDemo from "./components/PortalDemo";
-import ErrorBoundary from "./components/ErrorBoundary";
-import Hero from "./components/Hero";
+// import ErrorBoundary from "./components/ErrorBoundary";
+// import Hero from "./components/Hero";
 
 function App() {
   return (
     <div className="App">
-      <ErrorBoundary>
+      <ClickCounter />
+      <HoverCounter />
+      {/* <ErrorBoundary>
         <Hero heroName="Batman" />
       </ErrorBoundary>
 
@@ -43,7 +47,7 @@ function App() {
 
       <ErrorBoundary>
         <Hero heroName="Joker" />
-      </ErrorBoundary>
+      </ErrorBoundary> */}
 
       {/* <PortalDemo /> */}
       {/* <FRParentInput /> */}

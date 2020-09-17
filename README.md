@@ -4401,3 +4401,131 @@ export default ErrorBoundary;
 ![](MARKDOWN_NOTES/67.png)
 
 ---
+
+# **Higher Order Components (Part 1)**
+
+---
+
+### Click Functionality
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClickCounter from "./components/ClickCounter";
+
+function App() {
+  return (
+    <div className="App">
+      <ClickCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ClickCounter.js`
+
+```js
+import React, { Component } from "react";
+
+class ClickCounter extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increamentCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count + 1 };
+    });
+  };
+
+  render() {
+    const { count } = this.state;
+    return (
+      <div>
+        <button onClick={this.increamentCount}>Click {count} Times</button>
+      </div>
+    );
+  }
+}
+
+export default ClickCounter;
+```
+
+### Hover Functionality
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import HoverCounter from "./components/HoverCounter";
+
+function App() {
+  return (
+    <div className="App">
+      <HoverCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`HoverCounter.js`
+
+```js
+import React, { Component } from "react";
+
+class HoverCounter extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increamentCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count + 1 };
+    });
+  };
+
+  render() {
+    const { count } = this.state;
+    return (
+      <div>
+        <h2 onMouseOver={this.increamentCount}>Hover {count} Times</h2>
+      </div>
+    );
+  }
+}
+
+export default HoverCounter;
+```
+
+> But we can see that the Click and Hover functionality have some same functions. But we duplicate these.
+
+> How can we re-use them?
+
+## Normal Case
+
+![](MARKDOWN_NOTES/68.png)
+
+## Complex Case
+
+![](MARKDOWN_NOTES/69.png)
+
+> Solution?
+
+- Higher Order Component
+
+---
