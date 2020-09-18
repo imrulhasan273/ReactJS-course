@@ -5491,3 +5491,25 @@ export default CounterTwo;
 > `this.props.children` instead of `this.props.render`. As everything enclosed between opening and closing tag refers the childrens of the tag.
 
 ---
+
+## FLow of `Rendering Props`:
+
+### Step 1
+
+- In `CounterTwo.js` component we can see `<div>{this.props.children(this.state.count, this.increamentCount)}</div>`. Here it returns `count` and `increamentCount` function to the `children` of `CounterTwo` component. In `App.js` `ClickCounterTwo.js` and `HoverCounterTwo.js` are childrens for `CounterTwo.js`
+
+### Step 2:
+
+- Here in `App.js` component `(count, increamentCount)` return from `CounterTwo.js` component. So here these values acts as parameters and passed to `ClickCounterTwo` component as **props**.
+
+### Step 3:
+
+- In `ClickCounterTwo.js` component `props` are destructed using `const { count, increamentCount } = this.props;`.
+
+- `<button onClick={increamentCount}>CLick {count} Time</button>`. Here `count` and `increamentCount` is controlled by this button in `ClickCounterTwo.js`
+
+---
+
+# **Context **
+
+---
