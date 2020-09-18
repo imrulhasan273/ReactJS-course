@@ -5096,3 +5096,398 @@ export default withCounter(HoverCounter, 10); //added
 > `export default withCounter(HoverCounter, 10);`
 
 ---
+
+# **Render Props**
+
+---
+
+## Why there is need for render props?
+
+- Its a alternative approach of `HOC Pattern` for re-using code without duplicating of code.
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClickCounterTwo from "./components/ClickCounterTwo";
+import HoverCounterTwo from "./components/HoverCounterTwo";
+
+function App() {
+  return (
+    <div className="App">
+      <ClickCounterTwo />
+      <HoverCounterTwo />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ClickCounterTwo.js`
+
+```js
+import React, { Component } from "react";
+
+class ClickCounterTwo extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increamentCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count + 1 };
+    });
+  };
+
+  render() {
+    const { count } = this.state;
+    return (
+      <div>
+        <button onClick={this.increamentCount}>CLick {count} Time</button>
+      </div>
+    );
+  }
+}
+
+export default ClickCounterTwo;
+```
+
+`HoverCounter.js`
+
+```js
+import React, { Component } from "react";
+
+class HoverCounterTwo extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increamentCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count + 1 };
+    });
+  };
+
+  render() {
+    const { count } = this.state;
+
+    return <h2 onMouseOver={this.increamentCount}>Hover {count} Times</h2>;
+  }
+}
+
+export default HoverCounterTwo;
+```
+
+- Here we can see we duplicate some functionality. So we need to re-use system.
+
+- Like `HOC Pattern` there is another Approach which is `Render Props Patten`.
+
+## Using Render Props Pattern
+
+- Create a new Component named `User.js`
+
+`User.js`
+
+```js
+import React, { Component } from "react";
+
+class User extends Component {
+  render() {
+    return <div>{this.props.name}</div>;
+  }
+}
+
+export default User;
+```
+
+Add below lines in `App` component
+
+`App.js`
+
+```js
+<User name="Imrul" />
+```
+
+Change the name props like below code
+
+`App.js`
+
+```js
+<User name={() => "Imrul"} />
+```
+
+`User.js`
+
+```js
+import React, { Component } from "react";
+
+class User extends Component {
+  render() {
+    return <div>{this.props.name()}</div>;
+  }
+}
+
+export default User;
+```
+
+> `{this.props.name()}` Here we can see `name` as function not string. So add `()` at the end of `name`
+
+> For the next step I want to have parameters to the function in the name props. Based on the paremeter, I want to change what is rendered by the User component.
+
+`App.js`
+
+```js
+<User name={(isLoggedIn) => (isLoggedIn ? "Imrul" : "Guest")} />
+```
+
+ANd in User Component
+
+`User.js`
+
+```js
+return <div>{this.props.name(true)}</div>;
+```
+
+`App.js`
+
+```js
+<User render={(isLoggedIn) => (isLoggedIn ? "Imrul" : "Guest")} />
+```
+
+`User.js`
+
+```js
+return <div>{this.props.render(true)}</div>;
+```
+
+> Here render will not conflict.
+
+> The Term `Render Props` refers to a technique for sharing code between React components using props whose value is a function.
+
+---
+
+## Understand using Code
+
+> Now the task is to share common functionality which are `constructor` and `increamentCount` using `Render Props`.
+
+## Render Props Technique
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClickCounterTwo from "./components/ClickCounterTwo";
+import HoverCounterTwo from "./components/HoverCounterTwo";
+import CounterTwo from "./components/CounterTwo";
+
+function App() {
+  return (
+    <div className="App">
+      <CounterTwo
+        render={(count, increamentCount) => (
+          <ClickCounterTwo count={count} increamentCount={increamentCount} />
+        )}
+      />
+
+      <CounterTwo
+        render={(count, increamentCount) => (
+          <HoverCounterTwo count={count} increamentCount={increamentCount} />
+        )}
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+
+> Render Props is the `ClickCounterTwo` to component the count state and increament count method from the counter component are passed as props to the ClickCOunterTwo COmponent. The `ClickCounterTwo` component makes use of the passed in props to render the actual UI. When you click on the Button and Call the increamentCount method or try to display the count value it is very much what the Counter component has provided. It is also what happens with the HoverCounterTwo component.
+
+> So even though they share the common code the counter component instance will be different and hence there is no conflict between the count state values.
+
+`ClickCounter.js`
+
+```js
+import React, { Component } from "react";
+
+class ClickCounterTwo extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+    return (
+      <div>
+        <button onClick={increamentCount}>CLick {count} Time</button>
+      </div>
+    );
+  }
+}
+
+export default ClickCounterTwo;
+```
+
+`HoverCounter.js`
+
+```js
+import React, { Component } from "react";
+
+class HoverCounterTwo extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+
+    return <h2 onMouseOver={increamentCount}>Hover {count} Times</h2>;
+  }
+}
+
+export default HoverCounterTwo;
+```
+
+`CounterTwo.js`
+
+```js
+import React, { Component } from "react";
+
+class CounterTwo extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increamentCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count + 1 };
+    });
+  };
+
+  render() {
+    return (
+      <div>{this.props.render(this.state.count, this.increamentCount)}</div>
+    );
+  }
+}
+
+export default CounterTwo;
+```
+
+---
+
+## Some simple changes
+
+In App Component
+
+- There is a variation of the render props pattern which doesn't make use of the props. Instead the `Children` props is used.
+
+- Instead of render props we pass in the function in between the component opening and closing tags.
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClickCounterTwo from "./components/ClickCounterTwo";
+import CounterTwo from "./components/CounterTwo";
+import HoverCounterTwo from "./components/HoverCounterTwo";
+
+function App() {
+  return (
+    <div className="App">
+      <CounterTwo>
+        {(count, increamentCount) => (
+          <ClickCounterTwo count={count} increamentCount={increamentCount} />
+        )}
+      </CounterTwo>
+
+      <CounterTwo>
+        {(count, increamentCount) => (
+          <HoverCounterTwo count={count} increamentCount={increamentCount} />
+        )}
+      </CounterTwo>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> Passed as children.
+
+`ClickCounterTwo.js`
+
+```js
+import React, { Component } from "react";
+
+class ClickCounterTwo extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+    return (
+      <div>
+        <button onClick={increamentCount}>CLick {count} Time</button>
+      </div>
+    );
+  }
+}
+
+export default ClickCounterTwo;
+```
+
+`HoverCounterTwo.js`
+
+```js
+import React, { Component } from "react";
+
+class HoverCounterTwo extends Component {
+  render() {
+    const { count, increamentCount } = this.props;
+
+    return <h2 onMouseOver={increamentCount}>Hover {count} Times</h2>;
+  }
+}
+
+export default HoverCounterTwo;
+```
+
+`CounterTwo.js`
+
+```js
+import React, { Component } from "react";
+
+class CounterTwo extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increamentCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count + 1 };
+    });
+  };
+
+  render() {
+    return (
+      <div>{this.props.children(this.state.count, this.increamentCount)}</div>
+    );
+  }
+}
+
+export default CounterTwo;
+```
+
+> `this.props.children` instead of `this.props.render`. As everything enclosed between opening and closing tag refers the childrens of the tag.
+
+---
