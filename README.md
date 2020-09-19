@@ -5510,6 +5510,456 @@ export default CounterTwo;
 
 ---
 
-# **Context **
+# **Context**
+
+---
+
+![](MARKDOWN_NOTES/74.png)
+
+> Context provides a way to pass data through the component tree without having to pass props down manually at every level.
+
+---
+
+## Initial States
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ComponentC from "./components/ComponentC";
+
+function App() {
+  return (
+    <div className="App">
+      <ComponentC />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ComponentC.js`
+
+```js
+import React, { Component } from "react";
+import ComponentE from "./ComponentE";
+
+export class ComponentC extends Component {
+  render() {
+    return <ComponentE />;
+  }
+}
+
+export default ComponentC;
+```
+
+`ComponentE.js`
+
+```js
+import React, { Component } from "react";
+import ComponentF from "./ComponentF";
+
+export class ComponentE extends Component {
+  render() {
+    return <ComponentF />;
+  }
+}
+
+export default ComponentE;
+```
+
+`ComponentF.js`
+
+```js
+import React, { Component } from "react";
+
+export class ComponentF extends Component {
+  render() {
+    return <div>Component F</div>;
+  }
+}
+
+export default ComponentF;
+```
+
+---
+
+> Now I will do how to get data from `App` component to `ComponentF` without passing through all intermidiate component.
+
+## Steps
+
+1. Create the Context
+2. Provide a context value
+3. Consume the context value
+
+---
+
+### Step #1
+
+`userContext.js`
+
+```js
+import React from "react";
+
+const UserContext = React.createContext();
+
+const UserProvider = UserContext.Provider;
+const UserConsumer = UserContext.Consumer;
+
+export { UserProvider, UserConsumer };
+```
+
+### Step #2
+
+- We need to provide this `userContext` using the `UserProvider` component.
+
+- And the place you provide is important. Because only the descendant components can consume it.
+
+- `App` component is usually a good place because pretty much all components fall under it.
+
+- So in `App` component, I will wrap `ComponentC` with `UserProvider`.
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ComponentC from "./components/ComponentC";
+import { UserProvider } from "./components/userContext";
+
+function App() {
+  return (
+    <div className="App">
+      <UserProvider>
+        <ComponentC />
+      </UserProvider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> Now `ProviderComponent` is responsible for providing a value for all the descendant components. The value we want to provide is the `username` using **value** attribute inside `UserProvider` component.
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ComponentC from "./components/ComponentC";
+import { UserProvider } from "./components/userContext";
+
+function App() {
+  return (
+    <div className="App">
+      <UserProvider value="Imrul">
+        <ComponentC />
+      </UserProvider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Step #3
+
+> Now the `username` can be consumed by `ComponentC` and any component nested inside `ComponentC`.
+
+> Now our task is to consume the `username` from our desired component.
+
+> For our demo, We will consume the `username` for `ComponentF`.
+
+> To consume a `context value` we need to user `Consumer Component`.
+
+> So in `ComponentF` in render method as part of the return statement includes the `UserConsumer` component and import it in the top.
+
+`ComponentF.js`
+
+```js
+import React, { Component } from "react";
+import { UserConsumer } from "./userContext";
+
+export class ComponentF extends Component {
+  render() {
+    return (
+      <UserConsumer>
+        {(username) => {
+          return <div>Hello {username}</div>;
+        }}
+      </UserConsumer>
+    );
+  }
+}
+
+export default ComponentF;
+```
+
+## Final Flow (Fresh)
+
+## Context API Using **Consumer Component**
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ComponentC from "./components/ComponentC";
+import { UserProvider } from "./components/userContext";
+
+function App() {
+  return (
+    <div className="App">
+      <UserProvider value="Imrul">
+        <ComponentC />
+      </UserProvider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`userContext.js`
+
+```js
+import React from "react";
+
+const UserContext = React.createContext();
+
+const UserProvider = UserContext.Provider;
+const UserConsumer = UserContext.Consumer;
+
+export { UserProvider, UserConsumer };
+```
+
+`ComponentC.js`
+
+```js
+import React, { Component } from "react";
+import ComponentE from "./ComponentE";
+
+export class ComponentC extends Component {
+  render() {
+    return <ComponentE />;
+  }
+}
+
+export default ComponentC;
+```
+
+`ComponentE.js`
+
+```js
+import React, { Component } from "react";
+import ComponentF from "./ComponentF";
+
+export class ComponentE extends Component {
+  render() {
+    return <ComponentF />;
+  }
+}
+
+export default ComponentE;
+```
+
+`ComponentF.js`
+
+```js
+import React, { Component } from "react";
+import { UserConsumer } from "./userContext";
+
+export class ComponentF extends Component {
+  render() {
+    return (
+      <UserConsumer>
+        {(username) => {
+          return <div>Hello {username}</div>;
+        }}
+      </UserConsumer>
+    );
+  }
+}
+
+export default ComponentF;
+```
+
+## Output:
+
+![](MARKDOWN_NOTES/75.png)
+
+---
+
+## Few More Points on **Context API**
+
+---
+
+1. **Point #1** Default Value: You can set a default value to your context. Default value is set while creating a context. It is passed as an argument to the create context method.
+
+2. **Point #2** Context Type Property: Instead of Context value there is another way to consume which is Context TYpe property on a class. Export the userContext itself.
+
+`userContext.js`
+
+```js
+import React from "react";
+
+const UserContext = React.createContext("Backstreet Imrul");
+
+const UserProvider = UserContext.Provider;
+const UserConsumer = UserContext.Consumer;
+
+export { UserProvider, UserConsumer };
+```
+
+And comment out the `UserProvider`.
+
+`App.js`
+
+```js
+<div className="App">
+  <ComponentC />;
+</div>
+```
+
+> We can see that the default value is showing.
+
+`userContext.js`
+
+```js
+import React from "react";
+
+const UserContext = React.createContext("Backstreet Imrul");
+
+const UserProvider = UserContext.Provider;
+const UserConsumer = UserContext.Consumer;
+
+export { UserProvider, UserConsumer };
+export default UserContext;
+```
+
+- assign this userContext to context type property on the class.
+
+`ComponentE.js`
+
+```js
+import React, { Component } from "react";
+import ComponentF from "./ComponentF";
+import UserContext from "./userContext";
+
+export class ComponentE extends Component {
+  render() {
+    return <ComponentF />;
+  }
+}
+
+ComponentE.contextType = UserContext;
+
+export default ComponentE;
+```
+
+---
+
+## Context API Using **Context Type Property**
+
+> For this example I will get the `username` form `CompoentE` using this method.
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ComponentC from "./components/ComponentC";
+import { UserProvider } from "./components/userContext";
+
+function App() {
+  return (
+    <div className="App">
+      <UserProvider value="Imrul">
+        <ComponentC />
+      </UserProvider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`userContext.js`
+
+```js
+import React from "react";
+
+const UserContext = React.createContext("Backstreet Imrul");
+
+const UserProvider = UserContext.Provider;
+const UserConsumer = UserContext.Consumer;
+
+export { UserProvider, UserConsumer };
+export default UserContext;
+```
+
+`ComponentC.js`
+
+```js
+import React, { Component } from "react";
+import ComponentE from "./ComponentE";
+
+export class ComponentC extends Component {
+  render() {
+    return <ComponentE />;
+  }
+}
+
+export default ComponentC;
+```
+
+`ComponentE.js`
+
+```js
+import React, { Component } from "react";
+import ComponentF from "./ComponentF";
+import UserContext from "./userContext";
+
+export class ComponentE extends Component {
+  // static contextType = UserContext;
+
+  render() {
+    return (
+      <div>
+        Component E context {this.context}
+        <ComponentF />
+      </div>
+    );
+  }
+}
+
+ComponentE.contextType = UserContext;
+
+export default ComponentE;
+```
+
+> If your application support the **Public Class View Syntax** you can replace `ComponentE.contextType = UserContext;` with `static contextType = UserContext` for same output.
+
+## Output
+
+![](MARKDOWN_NOTES/76.png)
+
+---
+
+## Now You might think that **Context Type Property** is much simplier that **Consumer Component Tech**.
+
+> But we should not just stick to context type.
+
+Two Limitation.
+
+1. It only works with `Class Components`.
+2. You can subscribe to a single context using **Context Type Property**.
+
+> Below is the code how multiple context is consumed using **Consumer Component Method**
+
+![](MARKDOWN_NOTES/77.png)
 
 ---

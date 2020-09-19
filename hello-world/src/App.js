@@ -1,9 +1,9 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import ClickCounterTwo from "./components/ClickCounterTwo";
-import CounterTwo from "./components/CounterTwo";
-import HoverCounterTwo from "./components/HoverCounterTwo";
+// import ClickCounterTwo from "./components/ClickCounterTwo";
+// import CounterTwo from "./components/CounterTwo";
+// import HoverCounterTwo from "./components/HoverCounterTwo";
 // import User from "./components/User";
 // import ClickCounter from "./components/ClickCounter";
 // import HoverCounter from "./components/HoverCounter";
@@ -35,11 +35,16 @@ import HoverCounterTwo from "./components/HoverCounterTwo";
 // import PortalDemo from "./components/PortalDemo";
 // import ErrorBoundary from "./components/ErrorBoundary";
 // import Hero from "./components/Hero";
+import ComponentC from "./components/ComponentC";
+import { UserProvider } from "./components/userContext";
 
 function App() {
   return (
     <div className="App">
-      <CounterTwo>
+      <UserProvider value="Imrul">
+        <ComponentC />
+      </UserProvider>
+      {/* <CounterTwo>
         {(count, increamentCount) => (
           <ClickCounterTwo count={count} increamentCount={increamentCount} />
         )}
@@ -49,7 +54,7 @@ function App() {
         {(count, increamentCount) => (
           <HoverCounterTwo count={count} increamentCount={increamentCount} />
         )}
-      </CounterTwo>
+      </CounterTwo> */}
 
       {/* <ClickCounterTwo />
       <HoverCounterTwo />
