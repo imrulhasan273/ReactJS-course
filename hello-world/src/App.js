@@ -35,15 +35,15 @@ import "./App.css";
 // import PortalDemo from "./components/PortalDemo";
 // import ErrorBoundary from "./components/ErrorBoundary";
 // import Hero from "./components/Hero";
-import ComponentC from "./components/ComponentC";
-import { UserProvider } from "./components/userContext";
+// import ComponentC from "./components/ComponentC";
+// import { UserProvider } from "./components/userContext";
 
 function App() {
   return (
     <div className="App">
-      <UserProvider value="Imrul">
+      {/* <UserProvider value="Imrul">
         <ComponentC />
-      </UserProvider>
+      </UserProvider> */}
       {/* <CounterTwo>
         {(count, increamentCount) => (
           <ClickCounterTwo count={count} increamentCount={increamentCount} />
