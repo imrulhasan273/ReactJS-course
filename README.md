@@ -6571,3 +6571,148 @@ export default HookCounter;
 ![](MARKDOWN_NOTES/88.png)
 
 ---
+
+# **useState**: How to `set state` based on `prevState` value
+
+---
+
+## Increament, Decreament and Reset
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+
+import HookCounterTwo from "./components/HookCounterTwo";
+
+function App() {
+  return (
+    <div className="App">
+      <HookCounterTwo />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`HookCounterTwo.js`
+
+```js
+import React, { useState } from "react";
+
+function HookCounterTwo() {
+  const initialCount = 0;
+  const [count, setCount] = useState(initialCount); //here count = 0, and setCount will change it
+
+  return (
+    <div>
+      Count: {count}
+      <button onClick={() => setCount(initialCount)}>Reset</button>
+      <button onClick={() => setCount(count + 1)}>Increament</button>
+      <button onClick={() => setCount(count - 1)}>Decreament</button>
+    </div>
+  );
+}
+
+export default HookCounterTwo;
+```
+
+---
+
+> Here this method and the previos method back in the previous tutorial both are **Unsafe** although they works fine.
+
+> It is not the right way to change the count value.
+
+> How to Increament count by 5?
+
+`HookCounter.js`
+
+```js
+import React, { useState } from "react";
+
+function HookCounterTwo() {
+  const initialCount = 0;
+  const [count, setCount] = useState(initialCount); //here count = 0, and setCount will change it
+
+  const increamentFive = () => {
+    for (let i = 0; i < 5; i++) {
+      setCount(count + 1);
+      console.log(count);
+    }
+  };
+  return (
+    <div>
+      Count: {count}
+      <br />
+      <button onClick={() => setCount(initialCount)}>Reset</button>
+      <br />
+      <button onClick={() => setCount(count + 1)}>Increament</button>
+      <br />
+      <button onClick={() => setCount(count - 1)}>Decreament</button>
+      <br />
+      <button onClick={increamentFive}>Increament 5</button>
+    </div>
+  );
+}
+
+export default HookCounterTwo;
+```
+
+> But we can see that the count is stil increamenting by 1. Because it is not know the prevState value.
+
+> We should pass `prevState` as argument.
+
+`HookCounter.js`
+
+```js
+import React, { useState } from "react";
+
+function HookCounterTwo() {
+  const initialCount = 0;
+  const [count, setCount] = useState(initialCount); //here count = 0, and setCount will change it
+
+  const increamentFive = () => {
+    for (let i = 0; i < 5; i++) {
+      setCount((prevCount) => prevCount + 1);
+    }
+  };
+  return (
+    <div>
+      Count: {count}
+      <br />
+      <button onClick={() => setCount(initialCount)}>Reset</button>
+      <br />
+      <button onClick={() => setCount((prevCount) => prevCount + 1)}>
+        Increament
+      </button>
+      <br />
+      <button onClick={() => setCount((prevCount) => prevCount - 1)}>
+        Decreament
+      </button>
+      <br />
+      <button onClick={increamentFive}>Increament 5</button>
+    </div>
+  );
+}
+
+export default HookCounterTwo;
+```
+
+> So this is how we `count` based on `prevCount`.
+
+- **Note:** Here `count` and `setCount` is for each other.
+  - here `count` is a variable where we set an initial state.
+  - here `setCount()` is a function where we set the count varaible.
+    - `const [count, setCount] = useState(initialCount);`
+    - Here inside `setCount()` function we can pass the `count` variable to increament directly by 1 or
+    - We can pass an **arrow** function inside this `setCount()` function. And this **arrow** function will take an arg which is the `prevState` value and can be called with any name. It will recognize it as `prevCount` because `setCount` function had been destructured with `count` variable itself.
+
+---
+
+---
+
+# **useState** with object
+
+---
