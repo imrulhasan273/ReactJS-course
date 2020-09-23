@@ -6831,3 +6831,64 @@ setName({ ...name, lastname: e.target.value });
 - replica is created using the spread operator.
 
 ---
+
+# **useState** with array
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import HookCounterFour from "./components/HookCounterFour";
+
+function App() {
+  return (
+    <div className="App">
+      <HookCounterFour />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`HookCounterFour.js`
+
+```js
+import React, { useState } from "react";
+
+function HookCounterFour() {
+  const [items, setItems] = useState([]);
+  const addItem = () => {
+    setItems([
+      ...items,
+      {
+        id: items.length,
+        value: Math.floor(Math.random() * 10) + 1,
+      },
+    ]);
+  };
+  return (
+    <div>
+      <button onClick={addItem}>Add a number</button>
+      <ul>
+        {items.map((item) => (
+          <li key={item.id}>{item.value}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default HookCounterFour;
+```
+
+---
+
+## Summary
+
+![](MARKDOWN_NOTES/80.png)
+
+---

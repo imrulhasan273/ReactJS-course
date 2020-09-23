@@ -1,8 +1,8 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import HookCounterThree from "./components/HookCounterThree";
-
+import HookCounterFour from "./components/HookCounterFour";
+// import HookCounterThree from "./components/HookCounterThree";
 // import HookCounterTwo from "./components/HookCounterTwo";
 // import HookCounter from "./components/HookCounter";
 // import PostForm from "./components/PostForm";
@@ -11,7 +11,8 @@ import HookCounterThree from "./components/HookCounterThree";
 function App() {
   return (
     <div className="App">
-      <HookCounterThree />
+      <HookCounterFour />
+      {/* <HookCounterThree /> */}
       {/* <HookCounterTwo /> */}
       {/* <HookCounter /> */}
       {/* <PostForm /> */}
