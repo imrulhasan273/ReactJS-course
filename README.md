@@ -6522,3 +6522,52 @@ export default PostForm;
 ![](MARKDOWN_NOTES/87.png)
 
 ---
+
+---
+
+# **useState** Hooks
+
+---
+
+## Counter using Hooks
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import HookCounter from "./components/HookCounter";
+
+function App() {
+  return (
+    <div className="App">
+      <HookCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`HookCounter.js`
+
+```js
+import React, { useState } from "react";
+
+function HookCounter() {
+  const [count, setCount] = useState(0); //here count = 0, and setCount will change it
+  return (
+    <div>
+      <button onClick={() => setCount(count + 1)}>Count {count}</button>
+    </div>
+  );
+}
+
+export default HookCounter;
+```
+
+---
+
+![](MARKDOWN_NOTES/88.png)
+
+---
