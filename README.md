@@ -6486,3 +6486,39 @@ export default PostForm;
 ---
 
 ---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+# **REACT HOOKS**
+
+---
+
+![](MARKDOWN_NOTES/82.png)
+
+## Reason
+
+![](MARKDOWN_NOTES/83.png)
+
+![](MARKDOWN_NOTES/84.png)
+
+![](MARKDOWN_NOTES/85.png)
+
+## Nothorthy Points
+
+![](MARKDOWN_NOTES/86.png)
+
+## Summary
+
+![](MARKDOWN_NOTES/87.png)
+
+---
