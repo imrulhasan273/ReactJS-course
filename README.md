@@ -6716,3 +6716,118 @@ export default HookCounterTwo;
 # **useState** with object
 
 ---
+
+`App.js`
+
+```js
+import React from "react";
+// import logo from "./logo.svg";
+import "./App.css";
+import HookCounterThree from "./components/HookCounterThree";
+
+function App() {
+  return (
+    <div className="App">
+      <HookCounterThree />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`HookCounterThree.js`
+
+```js
+import React, { useState } from "react";
+
+function HookCounterThree() {
+  const [name, setName] = useState({ firstname: "", lastname: "" });
+  return (
+    <form>
+      <input
+        type="text"
+        placeholder="First Name"
+        value={name.firstname}
+        onChange={(e) => setName({ firstname: e.target.value })}
+      />
+      <input
+        type="text"
+        placeholder="last Name"
+        value={name.lastname}
+        onChange={(e) => setName({ lastname: e.target.value })}
+      />
+      <h2>Your First Name - {name.firstname}</h2>
+      <h2>Your Last Name - {name.lastname}</h2>
+    </form>
+  );
+}
+
+export default HookCounterThree;
+```
+
+## Output (When typing first name)
+
+![](MARKDOWN_NOTES/89.png)
+
+## Output (when typing last name)
+
+![](MARKDOWN_NOTES/90.png)
+
+> The first name is vanished.
+
+> Its a problem.
+
+## Reason
+
+![](MARKDOWN_NOTES/91.png)
+
+![](MARKDOWN_NOTES/92.png)
+
+- state does not automatically merge and update the object.
+- This is the key difference to `set state` which you come across in class components.
+- `setState` will merge the state whereas the `useState` hook set of function will not merge the state. Yu have to do it manually.
+- We can use `spread` operator to handle this manual merge.
+- pass `...name` inside the `setName` function.
+
+`HookCounterThree.js`
+
+```js
+import React, { useState } from "react";
+
+function HookCounterThree() {
+  const [name, setName] = useState({ firstname: "", lastname: "" });
+  return (
+    <form>
+      <input
+        type="text"
+        placeholder="First Name"
+        value={name.firstname}
+        onChange={(e) => setName({ ...name, firstname: e.target.value })}
+      />
+      <input
+        type="text"
+        placeholder="last Name"
+        value={name.lastname}
+        onChange={(e) => setName({ ...name, lastname: e.target.value })}
+      />
+      <h2>Your First Name - {name.firstname}</h2>
+      <h2>Your Last Name - {name.lastname}</h2>
+      <h2>{JSON.stringify(name)}</h2>
+    </form>
+  );
+}
+
+export default HookCounterThree;
+```
+
+What is the meaning of below code?
+
+```js
+setName({ ...name, lastname: e.target.value });
+```
+
+- Meaning: Hey!!!, make a replica of name object and then only update the lastname property to the new value.
+- replica is created using the spread operator.
+
+---
