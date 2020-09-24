@@ -1,6 +1,8 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
+import HookCounterOne from "./components/HookCounterOne";
+// import ClassCounterOne from "./components/ClassCounterOne";
 // import HookCounterFour from "./components/HookCounterFour";
 // import HookCounterThree from "./components/HookCounterThree";
 // import HookCounterTwo from "./components/HookCounterTwo";
@@ -11,6 +13,8 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
+      <HookCounterOne />
+      {/* <ClassCounterOne /> */}
       {/* <HookCounterFour /> */}
       {/* <HookCounterThree /> */}
       {/* <HookCounterTwo /> */}

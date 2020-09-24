@@ -6943,3 +6943,132 @@ class Example extends React.Component {
 ![](MARKDOWN_NOTES/96.png)
 
 ---
+
+# **useEffect** After Render
+
+---
+
+## Example in Class Component without useEffect
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClassCounterOne from "./components/ClassCounterOne";
+
+function App() {
+  return (
+    <div className="App">
+      <ClassCounterOne />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ClassCounterOne.js`
+
+```js
+import React, { Component } from "react";
+
+class ClassCounterOne extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+      name: "",
+    };
+  }
+
+  componentDidMount() {
+    document.title = `Clicked ${this.state.count} times`;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.count !== this.state.count) {
+      console.log("Updating document title");
+      document.title = `Clicked ${this.state.count} times`;
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          Click {this.state.count} times
+        </button>
+      </div>
+    );
+  }
+}
+
+export default ClassCounterOne;
+```
+
+### Output
+
+![](MARKDOWN_NOTES/97.png)
+
+> title is also changing with counter value
+
+---
+
+## Similar with useEffect Hooks
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import HookCounterOne from "./components/HookCounterOne";
+
+function App() {
+  return (
+    <div className="App">
+      <HookCounterOne />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`HookCounterOne.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function HookCounterOne() {
+  const initialState = 0;
+  const [count, setCount] = useState(initialState);
+
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+  });
+
+  return (
+    <div>
+      <button onClick={() => setCount(count + 1)}>Click {count} times</button>
+    </div>
+  );
+}
+
+export default HookCounterOne;
+```
+
+> this `useEffect` function will be executed in every render.
+
+### Output
+
+![](MARKDOWN_NOTES/98.png)
+
+---
+
+- `useEffect` runs on every render.
+- `useEffect` is place inside the component. By doing this we can easily access the components state and props without having to write any additional code.
+
+---
+
+---
