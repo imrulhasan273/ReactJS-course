@@ -7433,3 +7433,148 @@ export default HookMouse;
 ---
 
 ---
+
+# useEffect with cleanup : same as componentDidUnMount
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import MouseContainer from "./components/MouseContainer";
+
+function App() {
+  return (
+    <div className="App">
+      <MouseContainer />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`MouseContainer.js`
+
+```js
+import React, { useState } from "react";
+import HookMouse from "./HookMouse";
+
+function MouseContainer() {
+  const [display, setDisplay] = useState(true);
+  return (
+    <div>
+      <button onClick={() => setDisplay(!display)}>Toggle Display</button>
+      {display && <HookMouse />}
+    </div>
+  );
+}
+
+export default MouseContainer;
+```
+
+`HookMouse.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function HookMouse() {
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+
+  const logMousePosition = (e) => {
+    console.log("Mouse Event");
+    setX(e.clientX);
+    setY(e.clientY);
+  };
+
+  useEffect(() => {
+    console.log("useEffect called");
+    window.addEventListener("mousemove", logMousePosition);
+  }, []);
+
+  return (
+    <div>
+      Hooks X - {x} Y - {y}
+    </div>
+  );
+}
+
+export default HookMouse;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/105.png)
+
+> Although we toogle the button to off the `HookMouse` component, we can see an warning in the console.
+
+> Below the warning we can see that the statement `MouseEvent` is still being logged.
+
+> So even though the component is being removed, the event listener which belongs to the component is still listening and executing. And this is what the warning indicates as well.
+
+> We can not perform a react state update on an unmounted component.
+
+> It indicates a memory leak in the application.
+
+> You have **unmounted** but the event listener should also be **canceled**.
+
+> This **canceled operation** is called as **Clean Up** in react.
+
+---
+
+### How do we handle the clean up code?
+
+just return below code inside `useEffect`
+
+```js
+return () => {
+  console.log("Component Unmounting Code  ");
+  window.removeEventListener("mousemove", logMousePosition);
+};
+```
+
+`HookMouse.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function HookMouse() {
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+
+  const logMousePosition = (e) => {
+    console.log("Mouse Event");
+    setX(e.clientX);
+    setY(e.clientY);
+  };
+
+  useEffect(() => {
+    console.log("useEffect called");
+    window.addEventListener("mousemove", logMousePosition);
+    return () => {
+      console.log("Component Unmounting Code  ");
+      window.removeEventListener("mousemove", logMousePosition);
+    };
+  }, []);
+
+  return (
+    <div>
+      Hooks X - {x} Y - {y}
+    </div>
+  );
+}
+
+export default HookMouse;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/106.png)
+
+> Now we can see everything is allright.
+
+--- 
+

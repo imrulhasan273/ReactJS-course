@@ -1,7 +1,8 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import HookMouse from "./components/HookMouse";
+import MouseContainer from "./components/MouseContainer";
+// import HookMouse from "./components/HookMouse";
 // import ClassMouse from "./components/ClassMouse";
 // import HookCounterOne from "./components/HookCounterOne";
 // import ClassCounterOne from "./components/ClassCounterOne";
@@ -15,7 +16,8 @@ import HookMouse from "./components/HookMouse";
 function App() {
   return (
     <div className="App">
-      <HookMouse />
+      <MouseContainer />
+      {/* <HookMouse /> */}
       {/* <ClassMouse /> */}
       {/* <HookCounterOne /> */}
       {/* <ClassCounterOne /> */}
