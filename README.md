@@ -6978,7 +6978,6 @@ class ClassCounterOne extends Component {
     super(props);
     this.state = {
       count: 0,
-      name: "",
     };
   }
 
@@ -6987,10 +6986,7 @@ class ClassCounterOne extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.count !== this.state.count) {
-      console.log("Updating document title");
-      document.title = `Clicked ${this.state.count} times`;
-    }
+    document.title = `Clicked ${this.state.count} times`;
   }
 
   render() {
@@ -7072,3 +7068,202 @@ export default HookCounterOne;
 ---
 
 ---
+
+# Conditionally Run Effect
+
+---
+
+- in some cases applying `useEffect` after every render might cause performance problem.
+
+- So we need a way of conditionally run an `effect` from a function component.
+
+## Example without `useEffects` in class component
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClassCounterOne from "./components/ClassCounterOne";
+
+function App() {
+  return (
+    <div className="App">
+      <ClassCounterOne />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ClassCounterOne.js`
+
+```js
+import React, { Component } from "react";
+
+class ClassCounterOne extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+      name: "",
+    };
+  }
+
+  componentDidMount() {
+    document.title = `Clicked ${this.state.count} times`;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("Updating document title");
+    document.title = `Clicked ${this.state.count} times`;
+  }
+
+  render() {
+    return (
+      <div>
+        <input
+          type="text"
+          value={this.state.name}
+          onChange={(e) => {
+            this.setState({ name: e.target.value });
+          }}
+        />
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          Click {this.state.count} times
+        </button>
+      </div>
+    );
+  }
+}
+
+export default ClassCounterOne;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/99.png)
+
+> It works fine as we update the counter value causes also update the document title.
+
+![](MARKDOWN_NOTES/100.png)
+
+> Here we can see when we typing text then also updating the document title although no need to update.
+
+> SO we need conditional effect. Only use effect when there is need.
+
+`ClassCounterOne.js`
+
+```js
+import React, { Component } from "react";
+
+class ClassCounterOne extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+      name: "",
+    };
+  }
+
+  componentDidMount() {
+    document.title = `Clicked ${this.state.count} times`;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.count !== this.state.count) {
+      console.log("Updating document title");
+      document.title = `Clicked ${this.state.count} times`;
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <input
+          type="text"
+          value={this.state.name}
+          onChange={(e) => {
+            this.setState({ name: e.target.value });
+          }}
+        />
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          Click {this.state.count} times
+        </button>
+      </div>
+    );
+  }
+}
+
+export default ClassCounterOne;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/101.png)
+
+> Everything is now optimized.
+
+---
+
+## Example using `useEffects` in functional component : Hooks Technique
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import HookCounterOne from "./components/HookCounterOne";
+
+function App() {
+  return (
+    <div className="App">
+      <HookCounterOne />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`HookCunterOne.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function HookCounterOne() {
+  const initialState = 0;
+  const initialName = "";
+  const [count, setCount] = useState(initialState);
+  const [name, setName] = useState(initialName);
+
+  useEffect(() => {
+    console.log("Use Effect: Updating Document Title");
+    document.title = `You clicked ${count} times`;
+  }, [count]);
+  return (
+    <div>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <button onClick={() => setCount(count + 1)}>Click {count} times</button>
+    </div>
+  );
+}
+
+export default HookCounterOne;
+```
+
+- Here we pass a second parameter which is an array inside `useEffect` function
+- This array will contain variables for which the `useEffect` function will be executed.
+- In this example we pass the `count` variable. So the `useEffect` will execute only when the `count` is update.
+
+## Output
+
+![](MARKDOWN_NOTES/102.png)
+
+---
+  
