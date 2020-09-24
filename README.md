@@ -6889,6 +6889,57 @@ export default HookCounterFour;
 
 ## Summary
 
-![](MARKDOWN_NOTES/80.png)
+![](MARKDOWN_NOTES/93.png)
+
+---
+
+---
+
+# **useEffect** Hooks
+
+---
+
+> In React class components, the render method itself shouldn’t cause side effects. It would be too early — we typically want to perform our effects after React has updated the DOM.
+
+> This is why in React classes, we put side effects into componentDidMount and componentDidUpdate. Coming back to our example, here is a React counter class component that updates the document title right after React makes changes to the DOM:
+
+```js
+class Example extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
+
+  componentDidMount() {
+    document.title = `You clicked ${this.state.count} times`;
+  }
+  componentDidUpdate() {
+    document.title = `You clicked ${this.state.count} times`;
+  }
+
+  render() {
+    return (
+      <div>
+        <p>You clicked {this.state.count} times</p>
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          Click me
+        </button>
+      </div>
+    );
+  }
+}
+```
+
+> here `componentDidMount` method calls onces. And `componentDidUpdate` method will be called when there is an update.
+
+![](MARKDOWN_NOTES/94.png)
+
+![](MARKDOWN_NOTES/95.png)
+
+> Tip: If you’re familiar with React class lifecycle methods, you can think of useEffect Hook as componentDidMount, componentDidUpdate, and componentWillUnmount combined.
+
+![](MARKDOWN_NOTES/96.png)
 
 ---
