@@ -7266,4 +7266,170 @@ export default HookCounterOne;
 ![](MARKDOWN_NOTES/102.png)
 
 ---
-  
+
+# Run effects only once
+
+---
+
+## View Mouse Position in (x,y) co-ordinate without using `useEffect` in class component
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ClassMouse from "./components/ClassMouse";
+
+function App() {
+  return (
+    <div className="App">
+      <ClassMouse />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ClassMouse.js`
+
+```js
+import React, { Component } from "react";
+
+class ClassMouse extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      x: 0,
+      y: 0,
+    };
+  }
+
+  logMousePosition = (e) => {
+    this.setState({ x: e.clientX, y: e.clientY });
+  };
+
+  componentDidMount() {
+    window.addEventListener("mousemove", this.logMousePosition);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("mousemove", this.logMousePosition);
+  }
+
+  render() {
+    return (
+      <div>
+        X - {this.state.x} Y - {this.state.y}
+      </div>
+    );
+  }
+}
+
+export default ClassMouse;
+```
+
+## View Mouse Position in (x,y) co-ordinate using `useEffect` in functional component
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import HookMouse from "./components/HookMouse";
+
+function App() {
+  return (
+    <div className="App">
+      <HookMouse />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`HookMouse.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function HookMouse() {
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+
+  const logMousePosition = (e) => {
+    console.log("Mouse Event");
+    setX(e.clientX);
+    setY(e.clientY);
+  };
+
+  useEffect(() => {
+    console.log("useEffect called");
+    window.addEventListener("mousemove", logMousePosition);
+  });
+
+  return (
+    <div>
+      Hooks X - {x} Y - {y}
+    </div>
+  );
+}
+
+export default HookMouse;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/103.png)
+
+> We can see that `effect` is called every time the component re-render.
+
+> In this example we don't want effect to depend on anything.
+
+> We want it to be called once on initial render only.
+
+> To achieve this specify an `empty array` as the second parameter to `useEffect`.
+
+`HookMouse.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function HookMouse() {
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+
+  const logMousePosition = (e) => {
+    console.log("Mouse Event");
+    setX(e.clientX);
+    setY(e.clientY);
+  };
+
+  useEffect(() => {
+    console.log("useEffect called");
+    window.addEventListener("mousemove", logMousePosition);
+  }, []);
+
+  return (
+    <div>
+      Hooks X - {x} Y - {y}
+    </div>
+  );
+}
+
+export default HookMouse;
+```
+
+![](MARKDOWN_NOTES/104.png)
+
+> Empty array means `useEffect` does not depend on any props or state. So there is no reason you will call this effect on re-render.
+
+- Now everything looks great.
+- Now the scrolling is also smooth.
+- Now we can also see that only rendering `Mouse Event` logs. ANd the `useEffect` called once.
+
+---
+
+---
