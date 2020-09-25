@@ -7682,7 +7682,7 @@ export default IntervalHookCounter;
 
 > The timer stops after counting 1.
 
-## Way 1
+## Way 1 (Wrong Way although it looks worked)
 
 ```js
 useEffect(() => {
@@ -7716,7 +7716,9 @@ function IntervalHookCounter() {
 export default IntervalHookCounter;
 ```
 
-## Way 2
+> it works, but it's conceptually wrong: it creates a new interval timer after each increment. each time it is created with the incremented count value, so the result seems ok, but that's not the way it's supposed to work. The setInterval should only be called once, so the dependency list really should be empty! The reason the first solution didn't work is because you created a closure with a fixed count variable. Each time the closure executes, the same count variable from the closure is used.
+
+## Way 2 (Recommanded Way)
 
 ```js
 const tick = () => {
@@ -7802,5 +7804,9 @@ function FriendStatusWithCounter(props) {
 ```
 
 > So if you have multiple effects to run make sure you separate them out rather than having all the code in the single `useEffect`.
+
+---
+
+# **Fetching data with useEffect Part 1**
 
 ---

@@ -1,7 +1,7 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import IntervalHookCounter from "./components/IntervalHookCounter";
+// import IntervalHookCounter from "./components/IntervalHookCounter";
 // import IntervalClassCounter from "./components/IntervalClassCounter";
 // import MouseContainer from "./components/MouseContainer";
 // import HookMouse from "./components/HookMouse";
@@ -18,7 +18,7 @@ import IntervalHookCounter from "./components/IntervalHookCounter";
 function App() {
   return (
     <div className="App">
-      <IntervalHookCounter />
+      {/* <IntervalHookCounter /> */}
       {/* <IntervalClassCounter /> */}
       {/* <MouseContainer /> */}
       {/* <HookMouse /> */}
