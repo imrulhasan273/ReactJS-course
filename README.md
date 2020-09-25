@@ -8204,6 +8204,79 @@ export default ComponentE;
 
 ![](MARKDOWN_NOTES/112.png)
 
+## Another Example of `useContext`
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import Toolbar from "./components/Toolbar";
+
+const themes = {
+  light: {
+    foreground: "#ffffff",
+    background: "#000000",
+  },
+  dark: {
+    foreground: "#ffffff",
+    background: "#555555",
+  },
+};
+
+export const ThemeContext = React.createContext(themes.light);
+
+function App() {
+  return (
+    <div className="App">
+      <ThemeContext.Provider value={themes.dark}>
+        <Toolbar />
+      </ThemeContext.Provider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`Toolbar.js`
+
+```js
+import React from "react";
+import ThemedButton from "./ThemedButton";
+
+function Toolbar(props) {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
+}
+
+export default Toolbar;
+```
+
+`ThemedButton.js`
+
+```js
+import React, { useContext } from "react";
+import { ThemeContext } from "../App";
+
+function ThemedButton() {
+  const theme = useContext(ThemeContext);
+  return (
+    <button style={{ background: theme.background, color: theme.foreground }}>
+      I am styled by theme context!
+    </button>
+  );
+}
+export default ThemedButton;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/116.png)
+
 ---
 
 # **useReducer Hook**
@@ -8308,6 +8381,41 @@ export default CounterOne;
 - `reducer` function accepts the `current state` and the `action` and return the `new state` depending on the action.
 - call to `useReducer` returns a pair of value.
   - `current value of the state` and `dispatch` method which is capable of accepting an action to execute the code specified in the render function.
-  - we get the state from `c
+  - we get the state from `count`.
+- Displaying the count.
+
+---
+
+## Template from official docx
+
+```js
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { count: state.count + 1 };
+    case "decrement":
+      return { count: state.count - 1 };
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={() => dispatch({ type: "decrement" })}>-</button>
+      <button onClick={() => dispatch({ type: "increment" })}>+</button>
+    </>
+  );
+}
+```
+
+---
+
+# **useReducer** Hooks: complex example
 
 ---

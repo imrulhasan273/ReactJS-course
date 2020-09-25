@@ -1,7 +1,8 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import CounterOne from "./components/CounterOne";
+// import Toolbar from "./components/Toolbar";
+// import CounterOne from "./components/CounterOne";
 // import ComponentC from "./components/ComponentC";
 // import DataFetching from "./components/DataFetching";
 // import IntervalHookCounter from "./components/IntervalHookCounter";
@@ -18,14 +19,33 @@ import CounterOne from "./components/CounterOne";
 // import PostForm from "./components/PostForm";
 // import PostList from "./components/PostList";
 
+//-----
 // # step 1
 // export const UserContext = React.createContext();
 // export const ChannelContext = React.createContext();
+//-----
+
+///------
+// const themes = {
+//   light: {
+//     foreground: "#ffffff",
+//     background: "#000000",
+//   },
+//   dark: {
+//     foreground: "#ffffff",
+//     background: "#555555",
+//   },
+// };
+// export const ThemeContext = React.createContext(themes.light);
+//-----
 
 function App() {
   return (
     <div className="App">
-      <CounterOne />
+      {/* <ThemeContext.Provider value={themes.dark}>
+        <Toolbar />
+      </ThemeContext.Provider> */}
+      {/* <CounterOne /> */}
       {/* <UserContext.Provider value={"Imrul"}>
         <ChannelContext.Provider value={"Backstreet Boys"}>
           <ComponentC />
