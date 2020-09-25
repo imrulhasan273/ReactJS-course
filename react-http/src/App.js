@@ -1,7 +1,8 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import DataFetching from "./components/DataFetching";
+import ComponentC from "./components/ComponentC";
+// import DataFetching from "./components/DataFetching";
 // import IntervalHookCounter from "./components/IntervalHookCounter";
 // import IntervalClassCounter from "./components/IntervalClassCounter";
 // import MouseContainer from "./components/MouseContainer";
@@ -16,10 +17,19 @@ import DataFetching from "./components/DataFetching";
 // import PostForm from "./components/PostForm";
 // import PostList from "./components/PostList";
 
+// # step 1
+export const UserContext = React.createContext();
+export const ChannelContext = React.createContext();
+
 function App() {
   return (
     <div className="App">
-      <DataFetching />
+      <UserContext.Provider value={"Imrul"}>
+        <ChannelContext.Provider value={"Backstreet Boys"}>
+          <ComponentC />
+        </ChannelContext.Provider>
+      </UserContext.Provider>
+      {/* <DataFetching /> */}
       {/* <IntervalHookCounter /> */}
       {/* <IntervalClassCounter /> */}
       {/* <MouseContainer /> */}

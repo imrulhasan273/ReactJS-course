@@ -8044,3 +8044,164 @@ export default DataFetching;
 ---
 
 ---
+
+# **useContext Hook Part 2**
+
+---
+
+## Example without `useContext` hooks
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ComponentC from "./components/ComponentC";
+export const UserContext = React.createContext();
+export const ChannelContext = React.createContext();
+
+function App() {
+  return (
+    <div className="App">
+      <UserContext.Provider value={"Imrul"}>
+        <ChannelContext.Provider value={"Backstreet Boys"}>
+          <ComponentC />
+        </ChannelContext.Provider>
+      </UserContext.Provider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ComponentC.js`
+
+```js
+import React from "react";
+import ComponentE from "./ComponentE";
+
+function ComponentC() {
+  return <ComponentE />;
+}
+
+export default ComponentC;
+```
+
+`ComponentE.js`
+
+```js
+import React from "react";
+import ComponentF from "./ComponentF";
+
+function ComponentE() {
+  return <ComponentF />;
+}
+
+export default ComponentE;
+```
+
+`ComponentF.js`
+
+```js
+import React from "react";
+import { UserContext, ChannelContext } from "../App";
+
+function ComponentF() {
+  return (
+    <div>
+      <UserContext.Consumer>
+        {(user) => {
+          return (
+            <ChannelContext.Consumer>
+              {(channel) => {
+                return (
+                  <div>
+                    User context value {user}, channel context value {channel}
+                  </div>
+                );
+              }}
+            </ChannelContext.Consumer>
+          );
+        }}
+      </UserContext.Consumer>
+    </div>
+  );
+}
+
+export default ComponentF;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/111.png)
+
+> We can get the `two` context value directly to `ComponentF`.
+
+> But it looks ugly in how we need to code in `ComponentF`.
+
+## Example using `useContext` hooks
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import ComponentC from "./components/ComponentC";
+export const UserContext = React.createContext();
+export const ChannelContext = React.createContext();
+
+function App() {
+  return (
+    <div className="App">
+      <UserContext.Provider value={"Imrul"}>
+        <ChannelContext.Provider value={"Backstreet Boys"}>
+          <ComponentC />
+        </ChannelContext.Provider>
+      </UserContext.Provider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ComponentC.js`
+
+```js
+import React from "react";
+import ComponentE from "./ComponentE";
+
+function ComponentC() {
+  return <ComponentE />;
+}
+
+export default ComponentC;
+```
+
+`ComponentE.js`
+
+```js
+import React, { useContext } from "react"; //step #1
+import ComponentF from "./ComponentF";
+import { UserContext, ChannelContext } from "../App"; //step #2
+
+function ComponentE() {
+  //step #3
+  const user = useContext(UserContext);
+  const channel = useContext(ChannelContext);
+  return (
+    <div>
+      User is {user} and channel is {channel}
+    </div>
+  );
+}
+
+export default ComponentE;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/112.png)
+
+---
