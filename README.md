@@ -8419,3 +8419,210 @@ function Counter() {
 # **useReducer** Hooks: complex example
 
 ---
+
+## Using Object
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import CounterTwo from "./components/CounterTwo";
+function App() {
+  return (
+    <div className="App">
+      <CounterTwo />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`CounterTwo.js`
+
+```js
+import React, { useReducer } from "react";
+
+const initialState = {
+  firstCounter: 0,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "increament":
+      return { firstCounter: state.firstCounter + 1 };
+    case "decreament":
+      return { firstCounter: state.firstCounter - 1 };
+    case "reset":
+      return initialState;
+    default:
+      return state;
+  }
+};
+
+function CounterTwo() {
+  const [count, dispatch] = useReducer(reducer, initialState);
+  return (
+    <div>
+      <div>Count - {count.firstCounter}</div>
+      <button onClick={() => dispatch({ type: "increament" })}>
+        Increament
+      </button>
+      <button onClick={() => dispatch({ type: "decreament" })}>
+        Decreament
+      </button>
+      <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
+    </div>
+  );
+}
+
+export default CounterTwo;
+```
+
+> Output shows same counting.
+
+---
+
+## What is the advantage of using this Object pattern?
+
+- concerning value by which we need to increament and decreament the counter.
+- what if you want to creament/decreament by 5 also?
+  - that is easy when the action is an object.
+  - just now our action has one property that is action `type`.
+  - 2nd property that can be called as `value` which should be inc or dec the counter.
+
+`CounterTwo.js`
+
+```js
+import React, { useReducer } from "react";
+
+const initialState = {
+  firstCounter: 0,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "increament":
+      return { firstCounter: state.firstCounter + action.value };
+    case "decreament":
+      return { firstCounter: state.firstCounter - action.value };
+    case "reset":
+      return initialState;
+    default:
+      return state;
+  }
+};
+
+function CounterTwo() {
+  const [count, dispatch] = useReducer(reducer, initialState);
+  return (
+    <div>
+      <div>Count - {count.firstCounter}</div>
+      <button onClick={() => dispatch({ type: "increament", value: 1 })}>
+        Increament
+      </button>
+      <button onClick={() => dispatch({ type: "decreament", value: 1 })}>
+        Decreament
+      </button>
+      <button onClick={() => dispatch({ type: "increament", value: 5 })}>
+        Increament 5
+      </button>
+      <button onClick={() => dispatch({ type: "decreament", value: 5 })}>
+        Decreament 5
+      </button>
+      <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
+    </div>
+  );
+}
+
+export default CounterTwo;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/117.png)
+
+> So by making use of action as an object we can use additional data in the reducer function.
+
+---
+
+## Second Scenario: State as an object
+
+- suppose you want to maintain two different counter. That turns out to be really simple if your state is an object.
+
+
+`CounterTwo.js`
+
+```js
+import React, { useReducer } from "react";
+
+const initialState = {
+  firstCounter: 0,
+  secondCounter: 10,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "increament":
+      return { ...state, firstCounter: state.firstCounter + action.value };
+    case "decreament":
+      return { ...state, firstCounter: state.firstCounter - action.value };
+    case "increament2":
+      return { ...state, secondCounter: state.secondCounter + action.value };
+    case "decreament2":
+      return { ...state, secondCounter: state.secondCounter - action.value };
+    case "reset":
+      return initialState;
+    default:
+      return state;
+  }
+};
+
+function CounterTwo() {
+  const [count, dispatch] = useReducer(reducer, initialState);
+  return (
+    <div>
+      <div>Counter 1: - {count.firstCounter}</div>
+      <div>Counter 2: - {count.secondCounter}</div>
+      <button onClick={() => dispatch({ type: "increament", value: 1 })}>
+        1: Increament
+      </button>
+      <button onClick={() => dispatch({ type: "decreament", value: 1 })}>
+        1: Decreament
+      </button>
+      <button onClick={() => dispatch({ type: "increament", value: 5 })}>
+        1: Increament 5
+      </button>
+      <button onClick={() => dispatch({ type: "decreament", value: 5 })}>
+        1: Decreament 5
+      </button>
+      <div>
+        <button onClick={() => dispatch({ type: "increament2", value: 1 })}>
+          2: Increament
+        </button>
+        <button onClick={() => dispatch({ type: "decreament2", value: 1 })}>
+          2: Decreament
+        </button>
+      </div>
+      <button onClick={() => dispatch({ type: "reset" })}>Reset</button>
+    </div>
+  );
+}
+
+export default CounterTwo;
+```
+> now we have two property in the state object. And we are changing only one at a time. To get the expected output we have to modify the return statements to merge the state properties. We have already seen how to do that. its `spread operator`.
+
+## Output
+
+![](MARKDOWN_NOTES/118.png)
+
+## Advantages
+
+- Using Action as an object: we are able to pass additional data to the reducer function.
+- Using State as an object: We are able to keep track multiple state variables.
+- Maintaining multiple variable in a single state object is suited when dealing with global state. But right now we are dealing with local state.
+- When 
+
+---

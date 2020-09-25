@@ -1,6 +1,7 @@
 import React from "react";
 // import logo from "./logo.svg";
 import "./App.css";
+import CounterTwo from "./components/CounterTwo";
 // import Toolbar from "./components/Toolbar";
 // import CounterOne from "./components/CounterOne";
 // import ComponentC from "./components/ComponentC";
@@ -42,6 +43,7 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
+      <CounterTwo />
       {/* <ThemeContext.Provider value={themes.dark}>
         <Toolbar />
       </ThemeContext.Provider> */}
