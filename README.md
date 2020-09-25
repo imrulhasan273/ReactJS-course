@@ -7576,5 +7576,231 @@ export default HookMouse;
 
 > Now we can see everything is allright.
 
---- 
+---
 
+# `useEffect` with incorrect dependency
+
+## Example without hooks using Class Component
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import IntervalClassCounter from "./components/IntervalClassCounter";
+function App() {
+  return (
+    <div className="App">
+      <IntervalClassCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`IntervalClassCounter.js`
+
+```js
+import React, { Component } from "react";
+
+class IntervalClassCounter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(this.tick, 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+  tick = () => {
+    this.setState({
+      count: this.state.count + 1,
+    });
+  };
+  render() {
+    return <h1>{this.state.count}</h1>;
+  }
+}
+
+export default IntervalClassCounter;
+```
+
+> the timer is counting automatically.
+
+---
+
+## Example using hooks with Functional Component
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import IntervalHookCounter from "./components/IntervalHookCounter";
+
+function App() {
+  return (
+    <div className="App">
+      <IntervalHookCounter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`IntervalHookCounter.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function IntervalHookCounter() {
+  const [count, setCount] = useState(0);
+
+  const tick = () => {
+    setCount(count + 1);
+  };
+  useEffect(() => {
+    const interval = setInterval(tick, 1000);
+    return () => {
+      clearInterval(interval); //unmount
+    };
+  }, []);
+  return <div>{count}</div>;
+}
+
+export default IntervalHookCounter;
+```
+
+> The timer stops after counting 1.
+
+## Way 1
+
+```js
+useEffect(() => {
+  const interval = setInterval(tick, 1000);
+  return () => {
+    clearInterval(interval); //unmount
+  };
+}, [count]);
+```
+
+`IntervalHookCounter.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function IntervalHookCounter() {
+  const [count, setCount] = useState(0);
+
+  const tick = () => {
+    setCount(count + 1);
+  };
+  useEffect(() => {
+    const interval = setInterval(tick, 1000);
+    return () => {
+      clearInterval(interval); //unmount
+    };
+  }, [count]);
+  return <div>{count}</div>;
+}
+
+export default IntervalHookCounter;
+```
+
+## Way 2
+
+```js
+const tick = () => {
+  setCount((prevCount) => prevCount + 1);
+};
+```
+
+`IntervalHookCounter.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function IntervalHookCounter() {
+  const [count, setCount] = useState(0);
+
+  const tick = () => {
+    setCount((prevCount) => prevCount + 1);
+  };
+  useEffect(() => {
+    const interval = setInterval(tick, 1000);
+    return () => {
+      clearInterval(interval); //unmount
+    };
+  }, []);
+  return <div>{count}</div>;
+}
+
+export default IntervalHookCounter;
+```
+
+---
+
+> Sometimes you might want to call a function with a `useEffect`
+
+Use like below
+
+```js
+useEffect(() => {
+  function doSomething() {
+    console.log(someProp);
+  }
+
+  doSomething();
+
+  const interval = setInterval(tick, 1000);
+
+  return () => {
+    clearInterval(interval); //unmount
+  };
+}, [someProp]);
+```
+
+---
+
+- In class component related code is split into different life cycle method whereas unrelated code is put together in the same life cycle method.
+
+- Hooks solved it.
+
+- It is possible to include multiple `useEffect` calls within the same component.
+
+## Example from Official Docs
+
+```js
+function FriendStatusWithCounter(props) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+  });
+
+  const [isOnline, setIsOnline] = useState(null);
+  useEffect(() => {
+    function handleStatusChange(status) {
+      setIsOnline(status.isOnline);
+    }
+
+    ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+    return () => {
+      ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+    };
+  });
+  // ...
+}
+```
+
+> So if you have multiple effects to run make sure you separate them out rather than having all the code in the single `useEffect`.
+
+---
