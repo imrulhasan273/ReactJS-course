@@ -8205,3 +8205,42 @@ export default ComponentE;
 ![](MARKDOWN_NOTES/112.png)
 
 ---
+
+# **useReducer Hook**
+
+---
+
+![](MARKDOWN_NOTES/113.png)
+
+## So far we are using
+
+- useState - state
+- useEffect - side effect
+- useContext - context API
+- useReducer - reducer
+
+---
+
+## reducer function in Vanilla JavaScript
+
+```js
+const array1 = [1, 2, 3, 4];
+const reducer = (accumulator, currentValue) => accumulator + currentValue;
+
+// 1 + 2 + 3 + 4
+console.log(array1.reduce(reducer));
+// expected output: 10
+
+// 5 + 1 + 2 + 3 + 4
+console.log(array1.reduce(reducer, 5));
+// expected output: 15
+```
+
+![](MARKDOWN_NOTES/114.png)
+
+## Summary
+
+![](MARKDOWN_NOTES/115.png)
+
+---
+
