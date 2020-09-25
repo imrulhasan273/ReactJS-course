@@ -7904,3 +7904,91 @@ export default DataFetching;
 > Now loops problem solved also.
 
 ---
+
+---
+
+# Fetch Individual Data from API.
+
+---
+
+`DataFetching.js`
+
+```js
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+function DataFetching() {
+  const [post, setPost] = useState({});
+  const [id, setId] = useState(1);
+  useEffect(() => {
+    axios
+      .get(`https://jsonplaceholder.typicode.com/posts/${id}`)
+      .then((res) => {
+        console.log(res);
+        setPost(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  return (
+    <div>
+      <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
+      <div>{post.title}</div>
+    </div>
+  );
+}
+
+export default DataFetching;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/107.png)
+
+![](MARKDOWN_NOTES/108.png)
+
+> We can see that the title is for id=1 even if we set input value to others id.
+
+> This is because we have now dependency which is id. So we need to pass the `id` in the dependency array inside `useEffect`.
+
+`DataFetching.js`
+
+```js
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+function DataFetching() {
+  const [post, setPost] = useState({});
+  const [id, setId] = useState(1);
+  useEffect(() => {
+    axios
+      .get(`https://jsonplaceholder.typicode.com/posts/${id}`)
+      .then((res) => {
+        console.log(res);
+        setPost(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
+  return (
+    <div>
+      <input type="text" value={id} onChange={(e) => setId(e.target.value)} />
+      <div>{post.title}</div>
+    </div>
+  );
+}
+
+export default DataFetching;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/107.png)
+
+![](MARKDOWN_NOTES/109.png)
+
+> We can see that now everything looks great.
+
+---
