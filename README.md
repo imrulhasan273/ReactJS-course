@@ -8244,3 +8244,70 @@ console.log(array1.reduce(reducer, 5));
 
 ---
 
+# **Counting Value using **useReducer\*\* Hooks
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import CounterOne from "./components/CounterOne";
+function App() {
+  return (
+    <div className="App">
+      <CounterOne />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`CounterOne.js`
+
+```js
+import React, { useReducer } from "react";
+
+const initialState = 0;
+
+const reducer = (state, action) => {
+  switch (action) {
+    case "increament":
+      return state + 1;
+    case "decreament":
+      return state - 1;
+    case "reset":
+      return initialState;
+    default:
+      return state;
+  }
+};
+
+function CounterOne() {
+  const [count, dispatch] = useReducer(reducer, initialState);
+  return (
+    <div>
+      <div>Count - {count}</div>
+      <button onClick={() => dispatch("increament")}>Increament</button>
+      <button onClick={() => dispatch("decreament")}>Decreament</button>
+      <button onClick={() => dispatch("reset")}>Reset</button>
+    </div>
+  );
+}
+
+export default CounterOne;
+```
+
+## Explanation
+
+- We start with importing `useReducer` from react
+- After that within our component we call `useReducer` passing `reducer` function and `initial state`
+- `initialState` is a numeric value set to 0 which is the count value.
+- `reducer` function accepts the `current state` and the `action` and return the `new state` depending on the action.
+- call to `useReducer` returns a pair of value.
+  - `current value of the state` and `dispatch` method which is capable of accepting an action to execute the code specified in the render function.
+  - we get the state from `c
+
+---
