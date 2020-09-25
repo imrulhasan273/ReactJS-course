@@ -7682,7 +7682,7 @@ export default IntervalHookCounter;
 
 > The timer stops after counting 1.
 
-## Way 1 (Wrong Way although it looks worked)
+## Way 1 (Wrong Way although it looks worked : Inefficiant)
 
 ```js
 useEffect(() => {
@@ -7718,7 +7718,7 @@ export default IntervalHookCounter;
 
 > it works, but it's conceptually wrong: it creates a new interval timer after each increment. each time it is created with the incremented count value, so the result seems ok, but that's not the way it's supposed to work. The setInterval should only be called once, so the dependency list really should be empty! The reason the first solution didn't work is because you created a closure with a fixed count variable. Each time the closure executes, the same count variable from the closure is used.
 
-## Way 2 (Recommanded Way)
+## Way 2 (Recommanded Way: Correct Way)
 
 ```js
 const tick = () => {
@@ -7808,5 +7808,99 @@ function FriendStatusWithCounter(props) {
 ---
 
 # **Fetching data with useEffect Part 1**
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import DataFetching from "./components/DataFetching";
+
+function App() {
+  return (
+    <div className="App">
+      <DataFetching />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`DataFetching.js`
+
+```js
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+function DataFetching() {
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/posts")
+      .then((res) => {
+        console.log(res);
+        setPosts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  return (
+    <div>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default DataFetching;
+```
+
+> Output shows as expected
+
+> But, In the console we can see there is an infinite loop for fetching data.
+
+> The data should fetched only once. So use an `empty array` to the `useEffect`
+
+`DataFetching.js`
+
+```js
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+function DataFetching() {
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/posts")
+      .then((res) => {
+        console.log(res);
+        setPosts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  return (
+    <div>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default DataFetching;
+```
+
+> Now loops problem solved also.
 
 ---
