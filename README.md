@@ -8551,7 +8551,6 @@ export default CounterTwo;
 
 - suppose you want to maintain two different counter. That turns out to be really simple if your state is an object.
 
-
 `CounterTwo.js`
 
 ```js
@@ -8612,6 +8611,7 @@ function CounterTwo() {
 
 export default CounterTwo;
 ```
+
 > now we have two property in the state object. And we are changing only one at a time. To get the expected output we have to modify the return statements to merge the state properties. We have already seen how to do that. its `spread operator`.
 
 ## Output
@@ -8623,6 +8623,78 @@ export default CounterTwo;
 - Using Action as an object: we are able to pass additional data to the reducer function.
 - Using State as an object: We are able to keep track multiple state variables.
 - Maintaining multiple variable in a single state object is suited when dealing with global state. But right now we are dealing with local state.
-- When 
+- When dealing with local state we have another way to keep track of multiple variables.
+
+---
+
+---
+
+# **Multiple useReducers**
+
+---
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import CounterThree from "./components/CounterThree";
+function App() {
+  return (
+    <div className="App">
+      <CounterThree />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`CounterThree.js`
+
+```js
+import React, { useReducer } from "react";
+
+const initialState = 0;
+
+const reducer = (state, action) => {
+  switch (action) {
+    case "increament":
+      return state + 1;
+    case "decreament":
+      return state - 1;
+    case "reset":
+      return initialState;
+    default:
+      return state;
+  }
+};
+
+function CounterThree() {
+  const [count, dispatch] = useReducer(reducer, initialState);
+  const [countTwo, dispatchTwo] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <div>Count - {count}</div>
+      <button onClick={() => dispatch("increament")}>Increament</button>
+      <button onClick={() => dispatch("decreament")}>Decreament</button>
+      <button onClick={() => dispatch("reset")}>Reset</button>
+      <div>
+        <div>Count - {countTwo}</div>
+        <button onClick={() => dispatchTwo("increament")}>Increament</button>
+        <button onClick={() => dispatchTwo("decreament")}>Decreament</button>
+        <button onClick={() => dispatchTwo("reset")}>Reset</button>
+      </div>
+    </div>
+  );
+}
+
+export default CounterThree;
+```
+
+- So, when dealing with multiple state variable that have the same state transition, it is a good idea to have multiple **useReducer** making use of same reducer function.
+
+- This will avoid the complexity of merging the state if it were to be an object and also prevents us from duplicating code in **reducer** function, like we have already seen in `CounterTwo.js`
 
 ---
