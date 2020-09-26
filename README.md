@@ -8698,3 +8698,220 @@ export default CounterThree;
 - This will avoid the complexity of merging the state if it were to be an object and also prevents us from duplicating code in **reducer** function, like we have already seen in `CounterTwo.js`
 
 ---
+
+# **useReducer with useContext** for Gobal State
+
+---
+
+![](MARKDOWN_NOTES/119.png)
+
+![](MARKDOWN_NOTES/120.png)
+
+> Out goal is to maintain a count state in `App.js` and modify the state from `A`, `D` and `F`.
+
+## Steps
+
+- Step 1: Create a counter in `App.js` using the `reducer` hook.
+- Step 2: Provide and consume the context in the required components.
+
+### Step 1
+
+-
+
+## Final Scenario
+
+`App.js`
+
+```js
+import React, { useReducer } from "react";
+import "./App.css";
+import ComA from "./components/ComA";
+import ComB from "./components/ComB";
+import ComC from "./components/ComC";
+export const CountContext = React.createContext();
+
+const initialState = 0;
+const reducer = (state, action) => {
+  switch (action) {
+    case "increament":
+      return state + 1;
+    case "decreament":
+      return state - 1;
+    case "reset":
+      return initialState;
+    default:
+      return state;
+  }
+};
+
+function App() {
+  const [count, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div className="App">
+      <CountContext.Provider
+        value={{ countState: count, countDispatch: dispatch }}
+      >
+        Count - {count}
+        <ComA />
+        <ComB />
+        <ComC />
+      </CountContext.Provider>
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ComA.js`
+
+```js
+import React, { useContext } from "react";
+import { CountContext } from "../App";
+
+function ComA() {
+  const countContext = useContext(CountContext);
+  return (
+    <>
+      <div>
+        Component A : {countContext.countState}
+        <button onClick={() => countContext.countDispatch("increament")}>
+          Increament
+        </button>
+        <button onClick={() => countContext.countDispatch("decreament")}>
+          Decreament
+        </button>
+        <button onClick={() => countContext.countDispatch("reset")}>Reset</button>
+      </div>
+    </>
+  );
+}
+
+export default ComA;
+```
+
+`ComB.js`
+
+```js
+import React from "react";
+import ComD from "./ComD";
+
+function ComB() {
+  return (
+    <div>
+      <ComD />
+    </div>
+  );
+}
+
+export default ComB;
+```
+
+`ComD.js`
+
+```js
+import React, { useContext } from "react";
+import { CountContext } from "../App";
+
+function ComD() {
+  const countContext = useContext(CountContext);
+  return (
+    <>
+      <div>
+        Component D : {countContext.countState}
+        <button onClick={() => countContext.countDispatch("increament")}>
+          Increament
+        </button>
+        <button onClick={() => countContext.countDispatch("decreament")}>
+          Decreament
+        </button>
+        <button onClick={() => countContext.countDispatch("reset")}>Reset</button>
+      </div>
+    </>
+  );
+}
+
+export default ComD;
+```
+
+`ComC.js`
+
+```js
+import React from "react";
+import ComE from "./ComE";
+
+function ComC() {
+  return (
+    <>
+      <ComE />
+    </>
+  );
+}
+
+export default ComC;
+```
+
+`ComE.js`
+
+```js
+import React from "react";
+import ComF from "./ComF";
+
+function ComE() {
+  return (
+    <>
+      <ComF />
+    </>
+  );
+}
+
+export default ComE;
+```
+
+`ComF.js`
+
+```js
+import React, { useContext } from "react";
+import { CountContext } from "../App";
+
+function ComF() {
+  const countContext = useContext(CountContext);
+  return (
+    <>
+      <div>
+        Component F : {countContext.countState}
+        <button onClick={() => countContext.countDispatch("increament")}>
+          Increament
+        </button>
+        <button onClick={() => countContext.countDispatch("decreament")}>
+          Decreament
+        </button>
+        <button onClick={() => countContext.countDispatch("reset")}>Reset</button>
+      </div>
+    </>
+  );
+}
+
+export default ComF;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/120.png)
+
+> Now we can manage `counter` from all the components.
+
+## Process Overview
+
+- In `App` component we created our counter using `Reducer` hook.
+- We declare the initial state and define the reducer function which modifies the state.
+- We passed these two as a parameter to `useReducer` and return the **current state** value and **dispatch** method.
+- To provide these pair of values we created a context called `CountContext`.
+- At the top most level we provided the two values as an object.
+- Finally, in the necessary components like `ComA`, `ComD` and `ComF` we use context to get hold of context values and access the appropriate values.
+  - **countDispatch** and **countState**.
+
+---
+
+---
