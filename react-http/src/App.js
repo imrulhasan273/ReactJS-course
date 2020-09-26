@@ -1,7 +1,8 @@
 import React, { useReducer } from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import DataFetchingTwo from "./components/DataFetchingTwo";
+import ParentComponent from "./components/ParentComponent";
+// import DataFetchingTwo from "./components/DataFetchingTwo";
 // import DataFetchingOne from "./components/DataFetchingOne";
 // import ComA from "./components/ComA";
 // import ComB from "./components/ComB";
@@ -67,7 +68,8 @@ function App() {
 
   return (
     <div className="App">
-      <DataFetchingTwo />
+      <ParentComponent />
+      {/* <DataFetchingTwo /> */}
       {/* <DataFetchingOne /> */}
       {/* <CountContext.Provider
         value={{ countState: count, countDispatch: dispatch }}

@@ -9065,3 +9065,273 @@ export default DataFetchingTwo;
 ---
 
 ---
+
+![](MARKDOWN_NOTES/123.png)
+
+---
+
+# **useCallback** Hook
+
+---
+
+## Example without **useCallback** hooks
+
+`App.js`
+
+```js
+import React, { useReducer } from "react";
+import "./App.css";
+import ParentComponent from "./components/ParentComponent";
+
+function App() {
+
+  return (
+    <div className="App">
+      <ParentComponent />
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+
+`ParentComponent.js`
+
+```js
+import React, { useState } from "react";
+import Count from "./Count";
+import Button from "./Button";
+import Title from "./Title";
+
+function ParentComponent() {
+  const [age, setAge] = useState(25);
+  const [salary, setSalary] = useState(50000);
+
+  const incrementAge = () => {
+    setAge(age + 1);
+  };
+
+  const incrementSalary = () => {
+    setSalary(salary + 1000);
+  };
+
+  return (
+    <div>
+      <Title />
+      <Count text="Age" count={age} />
+      <Button handleClick={incrementAge}>Increment Age</Button>
+      <Count text="Salary" count={salary} />
+      <Button handleClick={incrementSalary}>Increment Salary</Button>
+    </div>
+  );
+}
+
+export default ParentComponent;
+
+```
+
+`Title.js`
+
+```js
+import React from "react";
+
+function Title() {
+  console.log("Rendering Title");
+  return <h2>useCallback Hook</h2>;
+}
+
+export default Title;
+
+```
+
+`Count.js`
+
+```js
+import React from "react";
+
+function Count({ text, count }) {
+  console.log(`Rendering ${text}`);
+  return (
+    <div>
+      {text} - {count}
+    </div>
+  );
+}
+
+export default Count;
+
+```
+
+`Button.js`
+
+```js
+import React from "react";
+
+function Button({ handleClick, children }) {
+  console.log("Rendering button - ", children);
+  return <button onClick={handleClick}>{children}</button>;
+}
+
+export default Button;
+
+```
+
+## Output
+
+![](MARKDOWN_NOTES/124.png)
+
+## There is a performance problem
+
+### Case 1: increamenting age
+
+![](MARKDOWN_NOTES/125.png)
+
+> We can see that although we increament `age`. But both `age` and `salary` is rendering.
+
+### Case 2: increamenting salary
+
+![](MARKDOWN_NOTES/126.png)
+
+> We can see that although we increament `salary`. But both `age` and `salary` is rendering.
+
+This is seriously a performance issue. Because it is not a problem for a few components. But if the project have too many component and updating a single component all the 20 or 30 or even 50 components. Then a performance issue will be major issue.
+
+- To improve performance we have to restrict re-render to only components that need to re-render.
+-  if we increament age only age component will re-render. Other three component should not re-render.
+- How do we achieve that?
+
+## Solution: using `React.memo`
+
+- `React.memo` is a higher order component that will prevent a functional component from being re-render if its props or state do not change. 
+- Keep in mind `React.memo` has nothing to do with `Hooks`.
+
+`Title.js`
+
+```js
+import React from "react";
+
+function Title() {
+  console.log("Rendering Title");
+  return <h2>useCallback Hook</h2>;
+}
+
+export default React.memo(Title);
+
+```
+
+`Button.js`
+
+```js
+import React from "react";
+
+function Button({ handleClick, children }) {
+  console.log("Rendering button - ", children);
+  return <button onClick={handleClick}>{children}</button>;
+}
+
+export default React.memo(Button);
+```
+
+`Count.js`
+
+```js
+import React from "react";
+
+function Count({ text, count }) {
+  console.log(`Rendering ${text}`);
+  return (
+    <div>
+      {text} - {count}
+    </div>
+  );
+}
+
+export default React.memo(Count);
+
+
+```
+
+## Output
+
+### Case 1: inc-> age
+
+![](MARKDOWN_NOTES/127.png)
+
+### Case 2: inc -> salary
+
+![](MARKDOWN_NOTES/128.png)
+
+> We can see still there are extra components rendering.
+
+> Here we can see extra button is rendering.
+
+### Reason
+
+- when we click on `inc age`, the age related components renders and increamented and `increament salary button` as well.
+
+- Because a new `increament salary` function is created each time the parent component re-renders.
+- And when dealing with functions we always have to consider reference equality. 
+- Even though the two functions have the exact same behavior, it doesn't mean they are equal to each other.
+- So the function before the re-render is different to the function after the re-render.
+- Since the function is a props, `React.memo` sees that the props has changed and will not prevent the re-render.
+- And this is the same case when you increament the `salary` as well.
+- So how do we overcome such complexity?
+
+## Solution: use `useCallback` hooks
+
+![](MARKDOWN_NOTES/129.png)
+
+## Steps
+- import `useCallback` hooks
+- We need to call `useCallback`
+
+`ParentComponent.js`
+
+```js
+import React, { useState, useCallback } from 'react'
+import Count from './Count'
+import Button from './Button'
+import Title from './Title'
+
+function ParentComponent() {
+	const [age, setAge] = useState(25)
+	const [salary, setSalary] = useState(50000)
+
+	const incrementAge = useCallback(() => {
+		setAge(age + 1)
+	}, [age])
+
+	const incrementSalary = useCallback(() => {
+		setSalary(salary + 1000)
+	}, [salary])
+
+	return (
+		<div>
+			<Title />
+			<Count text="Age" count={age} />
+			<Button handleClick={incrementAge}>Increment Age</Button>
+			<Count text="Salary" count={salary} />
+			<Button handleClick={incrementSalary}>Increment Salary</Button>
+		</div>
+	)
+}
+
+export default ParentComponent
+```
+
+## Output
+
+### Case 1: inc-> age
+
+![](MARKDOWN_NOTES/130.png)
+
+### Case 2: inc -> salary
+
+![](MARKDOWN_NOTES/131.png)
+
+> Now we can see all the extra components are not re-rendering when we change specific components value.
+
+
+---
