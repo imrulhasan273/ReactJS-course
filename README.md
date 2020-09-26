@@ -8898,7 +8898,7 @@ export default ComF;
 
 ## Output
 
-![](MARKDOWN_NOTES/120.png)
+![](MARKDOWN_NOTES/121.png)
 
 > Now we can manage `counter` from all the components.
 

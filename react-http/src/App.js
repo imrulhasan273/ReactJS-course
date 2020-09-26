@@ -1,9 +1,9 @@
 import React, { useReducer } from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import ComA from "./components/ComA";
-import ComB from "./components/ComB";
-import ComC from "./components/ComC";
+// import ComA from "./components/ComA";
+// import ComB from "./components/ComB";
+// import ComC from "./components/ComC";
 // import CounterThree from "./components/CounterThree";
 // import CounterTwo from "./components/CounterTwo";
 // import Toolbar from "./components/Toolbar";
@@ -44,35 +44,35 @@ import ComC from "./components/ComC";
 // export const ThemeContext = React.createContext(themes.light);
 //-----
 
-export const CountContext = React.createContext();
+// export const CountContext = React.createContext();
 
-const initialState = 0;
-const reducer = (state, action) => {
-  switch (action) {
-    case "increament":
-      return state + 1;
-    case "decreament":
-      return state - 1;
-    case "reset":
-      return initialState;
-    default:
-      return state;
-  }
-};
+// const initialState = 0;
+// const reducer = (state, action) => {
+//   switch (action) {
+//     case "increament":
+//       return state + 1;
+//     case "decreament":
+//       return state - 1;
+//     case "reset":
+//       return initialState;
+//     default:
+//       return state;
+//   }
+// };
 
 function App() {
-  const [count, dispatch] = useReducer(reducer, initialState);
+  // const [count, dispatch] = useReducer(reducer, initialState);
 
   return (
     <div className="App">
-      <CountContext.Provider
+      {/* <CountContext.Provider
         value={{ countState: count, countDispatch: dispatch }}
       >
         Count - {count}
         <ComA />
         <ComB />
         <ComC />
-      </CountContext.Provider>
+      </CountContext.Provider> */}
       {/* <CounterThree /> */}
       {/* <CounterTwo /> */}
       {/* <ThemeContext.Provider value={themes.dark}>
