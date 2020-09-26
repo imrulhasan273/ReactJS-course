@@ -8915,3 +8915,73 @@ export default ComF;
 ---
 
 ---
+
+# **Fetching data with useReducer**
+
+---
+
+> We use before the `useState`. Now we will see how to do with `useReducer`.
+
+> Both are used for state management.
+
+## Example using `useState` hooks
+
+`App.js`
+
+```js
+import React, { useReducer } from "react";
+import "./App.css";
+import DataFetchingOne from "./components/DataFetchingOne";
+function App() {
+  return (
+    <div className="App">
+      <DataFetchingOne />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`DataFetchingOne.js`
+
+```js
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+function DataFetchingOne() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [post, setPost] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(`https://jsonplaceholder.typicode.com/posts/1`)
+      .then((response) => {
+        setLoading(false);
+        setPost(response.data);
+        setError("");
+      })
+      .catch((error) => {
+        setLoading(false);
+        setPost({});
+        setError("Something went wrong!");
+      });
+  }, []);
+
+  return (
+    <div>
+      {loading ? "Loading" : post.title}
+      {error ? error : null}
+    </div>
+  );
+}
+
+export default DataFetchingOne;
+```
+
+## Output
+
+![](MARKDOWN_NOTES/122.png)
+
+## Example using `useReducer` hooks
