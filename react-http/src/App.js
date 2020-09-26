@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import ParentComponent from "./components/ParentComponent";
+// import ParentComponent from "./components/ParentComponent";
 // import DataFetchingTwo from "./components/DataFetchingTwo";
 // import DataFetchingOne from "./components/DataFetchingOne";
 // import ComA from "./components/ComA";
@@ -68,7 +68,7 @@ function App() {
 
   return (
     <div className="App">
-      <ParentComponent />
+      {/* <ParentComponent /> */}
       {/* <DataFetchingTwo /> */}
       {/* <DataFetchingOne /> */}
       {/* <CountContext.Provider
