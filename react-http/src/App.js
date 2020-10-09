@@ -1,7 +1,8 @@
 import React, { useReducer } from "react";
 // import logo from "./logo.svg";
 import "./App.css";
-import HookTimer from "./components/HookTimer";
+import DocTitleOne from "./components/DocTitleOne";
+// import HookTimer from "./components/HookTimer";
 // import ClassTimer from "./components/ClassTimer";
 // import FocusInput from "./components/FocusInput";
 // import Counter from "./components/Counter";
@@ -72,7 +73,8 @@ function App() {
 
   return (
     <div className="App">
-      <HookTimer />
+      <DocTitleOne />
+      {/* <HookTimer /> */}
       {/* <ClassTimer /> */}
       {/* <FocusInput /> */}
       {/* <Counter /> */}

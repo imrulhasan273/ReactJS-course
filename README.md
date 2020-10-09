@@ -9686,4 +9686,106 @@ export default HookTimer;
 - define `const intervalRef = useRef();` globally.
 - And then use `intervalRef.current` to use globally.
 
+> useRef returns a mutable ref object whose .current property is initialized to the passed argument (initialValue). The returned object will persist for the full lifetime of the component.
+
+> Essentially, useRef is like a “box” that can hold a mutable value in its .current property.
+
+You might be familiar with refs primarily as a way to access the DOM. If you pass a ref object to React with `<div ref={myRef} />`, React will set its .current property to the corresponding DOM node whenever that node changes.
+
+However, useRef() is useful for more than the ref attribute. It’s handy for keeping any mutable value around similar to how you’d use instance fields in classes.
+
+This works because useRef() creates a plain JavaScript object. The only difference between useRef() and creating a {current: ...} object yourself is that useRef will give you the same ref object on every render.
+
+Keep in mind that useRef doesn’t notify you when its content changes. Mutating the .current property doesn’t cause a re-render. If you want to run some code when React attaches or detaches a ref to a DOM node, you may want to use a callback ref instead.
+
+---
+
+---
+
+# **Custom Hooks**
+
+---
+
+- When we want to share logic between two JavaScript functions, we extract it to a third function. Both components and Hooks are functions, so this works for them too!
+- A custom Hook is a JavaScript function whose name starts with ”use” and that may call other Hooks.
+
+`App.js`
+
+```js
+import React, { useReducer } from "react";
+import "./App.css";
+import DocTitleTwo from "./components/DocTitleTwo";
+import DocTitleOne from "./components/DocTitleOne";
+
+function App() {
+  return (
+    <div className="App">
+      <DocTitleOne />
+      <DocTitleTwo />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`DocTitleOne.js`
+
+```js
+import React, { useState } from "react";
+import useDocumentTitle from "../hooks/useDocumentTitle";
+
+function DocTitleOne() {
+  const [count, setCount] = useState(0);
+  useDocumentTitle(count); //this is our Custom Hook defined in useDocumentTitle
+
+  return (
+    <div>
+      <button onClick={() => setCount(count + 1)}>Count - {count}</button>
+    </div>
+  );
+}
+
+export default DocTitleOne;
+```
+
+`DocTitleTwo.js`
+
+```js
+import React, { useState } from "react";
+import useDocumentTitle from "../hooks/useDocumentTitle";
+
+function DocTitleTwo() {
+  const [count, setCount] = useState(0);
+  useDocumentTitle(count); //this is our Custom Hook defined in useDocumentTitle.js
+  return (
+    <div>
+      <button onClick={() => setCount(count + 1)}>Count - {count}</button>
+    </div>
+  );
+}
+
+export default DocTitleTwo;
+```
+
+`useDocumentTitle.js`
+
+```js
+import { useEffect } from "react";
+
+function useDocumentTitle(count) {
+  useEffect(() => {
+    document.title = `Count ${count}`;
+  }, [count]);
+}
+
+export default useDocumentTitle;
+```
+
+- Above file is our `Custom Hook`.
+- We make this custom hook because the two files `DocTitleOne` and `DocTitleTwo` has same logic.
+- So we move this logic to our `Cusom Hook` to reuse if we need it again.
+
+---
+
 ---
