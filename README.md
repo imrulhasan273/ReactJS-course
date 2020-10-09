@@ -9084,7 +9084,6 @@ import "./App.css";
 import ParentComponent from "./components/ParentComponent";
 
 function App() {
-
   return (
     <div className="App">
       <ParentComponent />
@@ -9093,9 +9092,7 @@ function App() {
 }
 
 export default App;
-
 ```
-
 
 `ParentComponent.js`
 
@@ -9129,7 +9126,6 @@ function ParentComponent() {
 }
 
 export default ParentComponent;
-
 ```
 
 `Title.js`
@@ -9143,7 +9139,6 @@ function Title() {
 }
 
 export default Title;
-
 ```
 
 `Count.js`
@@ -9161,7 +9156,6 @@ function Count({ text, count }) {
 }
 
 export default Count;
-
 ```
 
 `Button.js`
@@ -9175,7 +9169,6 @@ function Button({ handleClick, children }) {
 }
 
 export default Button;
-
 ```
 
 ## Output
@@ -9199,12 +9192,12 @@ export default Button;
 This is seriously a performance issue. Because it is not a problem for a few components. But if the project have too many component and updating a single component all the 20 or 30 or even 50 components. Then a performance issue will be major issue.
 
 - To improve performance we have to restrict re-render to only components that need to re-render.
--  if we increament age only age component will re-render. Other three component should not re-render.
+- if we increament age only age component will re-render. Other three component should not re-render.
 - How do we achieve that?
 
 ## Solution: using `React.memo`
 
-- `React.memo` is a higher order component that will prevent a functional component from being re-render if its props or state do not change. 
+- `React.memo` is a higher order component that will prevent a functional component from being re-render if its props or state do not change.
 - Keep in mind `React.memo` has nothing to do with `Hooks`.
 
 `Title.js`
@@ -9218,7 +9211,6 @@ function Title() {
 }
 
 export default React.memo(Title);
-
 ```
 
 `Button.js`
@@ -9249,8 +9241,6 @@ function Count({ text, count }) {
 }
 
 export default React.memo(Count);
-
-
 ```
 
 ## Output
@@ -9272,7 +9262,7 @@ export default React.memo(Count);
 - when we click on `inc age`, the age related components renders and increamented and `increament salary button` as well.
 
 - Because a new `increament salary` function is created each time the parent component re-renders.
-- And when dealing with functions we always have to consider reference equality. 
+- And when dealing with functions we always have to consider reference equality.
 - Even though the two functions have the exact same behavior, it doesn't mean they are equal to each other.
 - So the function before the re-render is different to the function after the re-render.
 - Since the function is a props, `React.memo` sees that the props has changed and will not prevent the re-render.
@@ -9284,41 +9274,42 @@ export default React.memo(Count);
 ![](MARKDOWN_NOTES/129.png)
 
 ## Steps
+
 - import `useCallback` hooks
 - We need to call `useCallback`
 
 `ParentComponent.js`
 
 ```js
-import React, { useState, useCallback } from 'react'
-import Count from './Count'
-import Button from './Button'
-import Title from './Title'
+import React, { useState, useCallback } from "react";
+import Count from "./Count";
+import Button from "./Button";
+import Title from "./Title";
 
 function ParentComponent() {
-	const [age, setAge] = useState(25)
-	const [salary, setSalary] = useState(50000)
+  const [age, setAge] = useState(25);
+  const [salary, setSalary] = useState(50000);
 
-	const incrementAge = useCallback(() => {
-		setAge(age + 1)
-	}, [age])
+  const incrementAge = useCallback(() => {
+    setAge(age + 1);
+  }, [age]);
 
-	const incrementSalary = useCallback(() => {
-		setSalary(salary + 1000)
-	}, [salary])
+  const incrementSalary = useCallback(() => {
+    setSalary(salary + 1000);
+  }, [salary]);
 
-	return (
-		<div>
-			<Title />
-			<Count text="Age" count={age} />
-			<Button handleClick={incrementAge}>Increment Age</Button>
-			<Count text="Salary" count={salary} />
-			<Button handleClick={incrementSalary}>Increment Salary</Button>
-		</div>
-	)
+  return (
+    <div>
+      <Title />
+      <Count text="Age" count={age} />
+      <Button handleClick={incrementAge}>Increment Age</Button>
+      <Count text="Salary" count={salary} />
+      <Button handleClick={incrementSalary}>Increment Salary</Button>
+    </div>
+  );
 }
 
-export default ParentComponent
+export default ParentComponent;
 ```
 
 ## Output
@@ -9333,5 +9324,147 @@ export default ParentComponent
 
 > Now we can see all the extra components are not re-rendering when we change specific components value.
 
+## Why not we use `Callback` hook all the time?
+
+- [Article](https://kentcdodds.com/blog/usememo-and-usecallback)
+
+---
+
+---
+
+# **useMemo Hook**
+
+---
+
+## Create a normal Counter First
+
+`App.js`
+
+```js
+import React, { useReducer } from "react";
+import "./App.css";
+import Counter from "./components/Counter";
+
+function App() {
+  return (
+    <div className="App">
+      <Counter />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`Counter.js`
+
+```js
+import React, { useState } from "react";
+
+function Counter() {
+  const [counterOne, setCounterOne] = useState(0);
+  const [counterTwo, setCounterTwo] = useState(0);
+
+  const increamentOne = () => {
+    setCounterOne(counterOne + 1);
+  };
+
+  const increamentTwo = () => {
+    setCounterTwo(counterTwo + 1);
+  };
+
+  const isEven = () => {
+    let i = 0;
+    while (i < 2000000000) i++; //slowing down the operation
+    return counterOne % 2 == 0;
+  };
+
+  return (
+    <>
+      <div>
+        <button onClick={increamentOne}>Count One - {counterOne}</button>
+        <span>{isEven() ? "Even" : "Odd"}</span>
+      </div>
+      <div>
+        <button onClick={increamentTwo}>Count Two - {counterTwo}</button>
+      </div>
+    </>
+  );
+}
+
+export default Counter;
+```
+
+- Here `<span>{isEven() ? "Even" : "Odd"}</span>` is called all the time. So slowing down the UI to update no matter which button is pressed.
+
+---
+
+- How to tell react not to recalculate certain values unnecesarily?
+
+- So When we change the **CounterOne** using **first button** only then the function should be called.
+- When press **2nd button**, the **isEven** function should not be called.
+
+## Solution? [useMemo Hook]
+
+- useMemo recompute the cached value when one of the dependencies has changed this optimization heads to avoid expensive calculations on every renders.
+
+`Counter.js`
+
+```js
+import React, { useState, useMemo } from "react";
+
+function Counter() {
+  const [counterOne, setCounterOne] = useState(0);
+  const [counterTwo, setCounterTwo] = useState(0);
+
+  const increamentOne = () => {
+    setCounterOne(counterOne + 1);
+  };
+
+  const increamentTwo = () => {
+    setCounterTwo(counterTwo + 1);
+  };
+
+  const isEven = useMemo(() => {
+    let i = 0;
+    while (i < 2000000000) i++; //slowing down the operation
+    return counterOne % 2 == 0;
+  }, [counterOne]);
+
+  return (
+    <>
+      <div>
+        <button onClick={increamentOne}>Count One - {counterOne}</button>
+        <span>{isEven ? "Even" : "Odd"}</span>
+      </div>
+      <div>
+        <button onClick={increamentTwo}>Count Two - {counterTwo}</button>
+      </div>
+    </>
+  );
+}
+
+export default Counter;
+```
+
+- Here we can see that `useMemo` hooks is obtained by a const named `isEven`.
+- This `useMemo` hook contains two parameters.
+  - First parameter is a arrow function which is previously defined.
+  - Second parameter is the **dependency** to tell for which value the **useMemo** hook should be called.
+
+---
+
+## useCallback and useMemo similar?
+
+- useCallback caches the provided function instance itself.
+- useMemo invokes the provided function and caches its result.
+- So use Callback if you want to cache function
+- use useMemo if you need to cache the result of an invoked function.
+
+---
+
+---
+
+# **useRef** Hooks
 
 ---

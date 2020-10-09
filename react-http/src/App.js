@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 // import logo from "./logo.svg";
 import "./App.css";
+import Counter from "./components/Counter";
 // import ParentComponent from "./components/ParentComponent";
 // import DataFetchingTwo from "./components/DataFetchingTwo";
 // import DataFetchingOne from "./components/DataFetchingOne";
@@ -68,6 +69,7 @@ function App() {
 
   return (
     <div className="App">
+      <Counter />
       {/* <ParentComponent /> */}
       {/* <DataFetchingTwo /> */}
       {/* <DataFetchingOne /> */}
