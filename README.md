@@ -9470,3 +9470,220 @@ export default Counter;
 ---
 
 ---
+
+- This hooks makes it possible to access the DOM node directly within the functional component.
+
+- How to focus on input field on page load?
+
+`App.js`
+
+```js
+import React, { useReducer } from "react";
+import "./App.css";
+import FocusInput from "./components/FocusInput";
+
+function App() {
+  return (
+    <div className="App">
+      <FocusInput />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`FocusInput.js`
+
+```js
+import React, { useEffect, useRef } from "react";
+
+function FocusInput() {
+  const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+  return (
+    <div>
+      <input ref={inputRef} type="text" />
+    </div>
+  );
+}
+
+export default FocusInput;
+```
+
+## Output
+
+![](MARKDOWN_NOTE/132.png)
+
+---
+
+---
+
+- Make a timer with pause button to stop timer.
+
+## Using a Class Component.
+
+`App.js`
+
+```js
+import React, { useReducer } from "react";
+import "./App.css";
+import ClassTimer from "./components/ClassTimer";
+
+function App() {
+  return (
+    <div className="App">
+      <ClassTimer />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`ClassTimer.js`
+
+```js
+import React, { Component } from "react";
+
+class ClassTimer extends Component {
+  interval;
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      timer: 0,
+    };
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.setState((prevState) => ({
+        timer: prevState.timer + 1,
+      }));
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  render() {
+    return (
+      <div>
+        Class Timer - {this.state.timer}
+        <button onClick={() => clearInterval(this.interval)}>
+          Clear Timer
+        </button>
+      </div>
+    );
+  }
+}
+
+export default ClassTimer;
+```
+
+---
+
+## Using `useEffect` and `useState`
+
+`App.js`
+
+```js
+import React from "react";
+import "./App.css";
+import HookTimer from "./components/HookTimer";
+
+function App() {
+  return (
+    <div className="App">
+      <HookTimer />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`HookTimer.js`
+
+```js
+import React, { useState, useEffect } from "react";
+
+function HookTimer() {
+  const [timer, setTimer] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div>
+      Hook Timer {timer}
+      <button onClick={() => clearInterval(interval)}>Hook Timer</button>
+    </div>
+  );
+}
+
+export default HookTimer;
+```
+
+### Error
+
+```js
+Failed to compile
+./src/components/HookTimer.js
+  Line 18:44:  'interval' is not defined  no-undef
+Search for the keywords to learn more about each error.
+```
+
+- Because `interval` is scoped in `useEffet` hook.
+- So we can not call the same `interval` from `button` which is out of the scope.
+
+---
+
+## Using `useRef`
+
+`HookCounter.js`
+
+```js
+import React, { useState, useEffect, useRef } from "react";
+
+function HookTimer() {
+  const [timer, setTimer] = useState(0);
+  const intervalRef = useRef();
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 1000);
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  return (
+    <div>
+      Hook Timer {timer}
+      <button onClick={() => clearInterval(intervalRef.current)}>
+        Hook Timer
+      </button>
+    </div>
+  );
+}
+
+export default HookTimer;
+```
+
+- Now everything works fine.
+- define `const intervalRef = useRef();` globally.
+- And then use `intervalRef.current` to use globally.
+
+---
